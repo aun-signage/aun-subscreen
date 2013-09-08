@@ -8,6 +8,7 @@
   "author": "Team aun",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "express": ""
+    "express": "",
+    "socket.io": ""
   }
 }
