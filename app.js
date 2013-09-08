@@ -20,3 +20,12 @@ io.sockets.on('connection', function (socket) {
     console.log('[' + socket.id + '] disconnected');
   });
 });
+
+var Twitter = require('./lib/twitter');
+var tw = new Twitter(
+  process.env.TWITTER_AUTH,
+  process.env.TWITTER_QUERY
+);
+tw.on('tweet', function(data) {
+  console.log('[' + data.user.screen_name + '] ' + data.text.replace(/\s+/, ' '));
+});
