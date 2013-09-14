@@ -5,6 +5,8 @@ append head
 
   script(type="text/html", id="message-template")
     li
+      strong.screen_name(data-bind="text: payload.user.screen_name")
+      | 
       span.message(data-bind="text: payload.text")
 
 block body
