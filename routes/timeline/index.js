@@ -7,7 +7,7 @@ module.exports = function(env, socialStream) {
     var payload = data.payload;
     console.log(
       '[' + payload.user.screen_name + '] ' +
-      payload.text.replace(/\s+/, ' ')
+      payload.text.replace(/\s+/g, ' ')
     );
   });
 
