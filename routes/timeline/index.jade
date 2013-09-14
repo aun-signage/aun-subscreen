@@ -3,5 +3,11 @@ extends ../../views/layout
 append head
   script(src="/js/aun-subscreen.js")
 
+  script(type="text/html", id="message-template")
+    li
+      span.message(data-bind="text: payload.text")
+
 block body
   h1 aun
+
+  ul#messages(data-bind="template: {name: 'message-template', foreach: messages}")

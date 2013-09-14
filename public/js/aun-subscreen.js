@@ -3,19 +3,19 @@ jQuery(document).ready(function($) {
 
   var ViewModel = function(socket) {
     var self = this;
+    var mySocket = socket;
     var mapping = {
-      messages: {
-        key: function(data) {
-          return ko.utils.unwrapObservable(data._id);
-        }
+      key: function(data) {
+        return ko.utils.unwrapObservable(data.id);
       }
     };
 
     self.messages = ko.observableArray();
 
     mySocket.on('message', function(data) {
-      console.log(data);
-      ko.mapping.fromJS(data, mapping, self);
+      self.messages(data);
     });
   };
+
+  ko.applyBindings(new ViewModel(socket));
 });

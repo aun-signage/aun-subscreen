@@ -12,6 +12,7 @@ module.exports = function(env, io, pgClient, socialStream) {
         if (err) {
           throw 'Error in selecting ' + err;
         }
+        console.log("HI");
         io.sockets.emit('message', result.rows);
       }
     );
