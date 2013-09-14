@@ -17,6 +17,10 @@ pgClient.connect(function(err) {
 });
 
 var socialStream = new SocialStream(process.env, pgClient);
+socialStream.on('update', function(data) {
+  var payload = data.payload;
+  console.log('[' + payload.user.screen_name + '] ' + payload.text.replace(/\s+/, ' '));
+});
 
 server.listen(port, function() {
   console.log('aun-subscreen now listening on ' + port);
