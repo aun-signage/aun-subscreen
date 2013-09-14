@@ -10,6 +10,7 @@
   "dependencies": {
     "express": "",
     "socket.io": "",
-    "ntwitter": ""
+    "ntwitter": "",
+    "pg": ""
   }
 }
