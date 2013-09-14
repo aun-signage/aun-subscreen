@@ -11,5 +11,10 @@ module.exports = function(env, socialStream) {
     );
   });
 
+  app.get('/', function(req, res) {
+    app.set('views', __dirname);
+    res.render('index.jade');
+  });
+
   return app;
 };
