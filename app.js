@@ -16,9 +16,6 @@ pgClient.connect(function(err) {
   }
 });
 
-var socialStream = new SocialStream(process.env, pgClient);
-app.use(require('./routes/timeline')(process.env, pgClient, socialStream));
-
 server.listen(port, function() {
   console.log('aun-subscreen now listening on ' + port);
 });
@@ -45,3 +42,6 @@ io.sockets.on('connection', function (socket) {
     console.log('[' + socket.id + '] disconnected');
   });
 });
+
+var socialStream = new SocialStream(process.env, pgClient);
+app.use(require('./routes/timeline')(process.env, io, pgClient, socialStream));

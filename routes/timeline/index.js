@@ -1,6 +1,6 @@
 var express = require('express');
 
-module.exports = function(env, pgClient, socialStream) {
+module.exports = function(env, io, pgClient, socialStream) {
   var app = express();
   var limit = 20;
 
