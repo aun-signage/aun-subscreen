@@ -27,6 +27,17 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/index.html');
 });
 
+io.configure(function () {
+  io.set('transports', ['xhr-polling']);
+  io.set('polling duration', 10);
+  io.set('log level', 1);
+
+  if (process.env.NODE_ENV == 'production') {
+    io.enable('browser client minification');
+    io.enable('browser client gzip');
+  }
+});
+
 io.sockets.on('connection', function (socket) {
   console.log('[' + socket.id + '] connected');
 
@@ -34,4 +45,3 @@ io.sockets.on('connection', function (socket) {
     console.log('[' + socket.id + '] disconnected');
   });
 });
-
