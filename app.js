@@ -20,10 +20,6 @@ server.listen(port, function() {
   console.log('aun-subscreen now listening on ' + port);
 });
 
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/public/index.html');
-});
-
 io.configure(function () {
   io.set('transports', ['xhr-polling']);
   io.set('polling duration', 10);
@@ -45,3 +41,5 @@ io.sockets.on('connection', function (socket) {
 
 var socialStream = new SocialStream(process.env, pgClient);
 app.use(require('./routes/timeline')(process.env, io, pgClient, socialStream));
+
+app.use(express.static(__dirname + '/public'));

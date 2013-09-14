@@ -12,10 +12,7 @@ module.exports = function(env, io, pgClient, socialStream) {
         if (err) {
           throw 'Error in selecting ' + err;
         }
-        result.rows.forEach(function(data) {
-          var payload = data.payload;
-          console.log('[' + payload.user.screen_name + '] ' + payload.text);
-        });
+        io.sockets.emit('message', result.rows);
       }
     );
   });
