@@ -17,7 +17,7 @@ pgClient.connect(function(err) {
 });
 
 var socialStream = new SocialStream(process.env, pgClient);
-app.use(require('./routes/timeline')(process.env, socialStream));
+app.use(require('./routes/timeline')(process.env, pgClient, socialStream));
 
 server.listen(port, function() {
   console.log('aun-subscreen now listening on ' + port);
