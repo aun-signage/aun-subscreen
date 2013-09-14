@@ -23,14 +23,14 @@ module.exports = function(env, io, pgClient, socialStream) {
   });
 
   io.sockets.on('connection', function (socket) {
-    query(function(rows) {
-      socket.emit('message', rows);
+    query(function(messages) {
+      socket.emit('messages', messages);
     });
   });
 
   socialStream.on('update', function(data) {
-    query(function(rows) {
-      io.sockets.emit('message', rows);
+    query(function(messages) {
+      io.sockets.emit('messages', messages);
     });
   });
 
