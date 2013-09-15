@@ -12,6 +12,7 @@
     "socket.io": "",
     "ntwitter": "",
     "pg": "",
+    "jade": "",
     "express-compiless": ""
   }
 }
