@@ -13,7 +13,7 @@ var databaseUrl = process.env.DATABASE_URL;
 var pgClient = new pg.Client(databaseUrl);
 pgClient.connect(function(err) {
   if (err) {
-    return console.error('failed to connect postgres', err);
+    throw 'failed to connect postgres: ' + err;
   }
 });
 
