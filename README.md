@@ -4,6 +4,8 @@
 
 You need to configure the following environment variables to start aun-subscreen:
 
+## Required
+
 * PORT
 * DATABASE_URL
 * TWITTER_AUTH
@@ -12,3 +14,8 @@ You need to configure the following environment variables to start aun-subscreen
 * IRC_PORT
 * IRC_NICK
 * IRC_CHANNELS
+
+## Optional
+
+* NODE_ENV
+* TWITTER_EXCLUDE_REGEXP

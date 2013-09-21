@@ -5,13 +5,25 @@ module.exports = function(env, io, pgClient, socialStream) {
   var app = express();
   var limit = 20;
 
-  var query = function(callback) {
+  var queryBuilder = function() {
     var s = squel.select()
       .from('messages')
       .order('time', false)
       .limit(limit);
-    pgClient.query(
-      s.toString(),
+
+    if (env.TWITTER_EXCLUDE_REGEXP) {
+      s = s.where(
+        "NOT (type = 'twitter' AND (payload ->> 'text') ~* ?)",
+        env.TWITTER_EXCLUDE_REGEXP
+      );
+    }
+
+    return s.toString();
+  };
+
+  var query = function(callback) {
+    var sql = queryBuilder();
+    pgClient.query(sql,
       function(err, result) {
         if (err) {
           throw 'Error in selecting ' + err;
