@@ -1,5 +1,8 @@
 jQuery(document).ready(function($) {
-  var socket = io.connect();
+  var options = {
+    query: location.search.replace(/^\?/, '')
+  };
+  var socket = io.connect(null, options);
 
   var ViewModel = function(socket) {
     var self = this;
