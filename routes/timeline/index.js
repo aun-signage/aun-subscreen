@@ -64,7 +64,8 @@ module.exports = function(env, io, pgClient, socialStream) {
 
   socialStream.on('update', function(data) {
     var channels = misc.activeChannels(io, '');
-    channels.forEach(function(channel) {
+    channels.forEach(function(channelJson) {
+      var channel = JSON.parse(channelJson);
       query(channel, function(messages) {
         io.sockets.emit('messages', messages);
       });
