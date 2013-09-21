@@ -12,10 +12,20 @@ module.exports = function(env, io, pgClient, socialStream) {
       .order('time', false)
       .limit(limit);
 
-    // TODO consider channel
+    var conds = [];
+    var values = [];
+    if (channel.tweet) {
+      conds.push("(type = 'tweet' AND (payload ->> 'text') ~* ?)");
+      values.push(channel.tweet);
+    }
+    if (channel.irc) {
+      // TODO consider irc channels
+      conds.push("(type = 'irc')");
+    }
+    s.where(conds.join(" OR "), values);
 
     if (env.TWITTER_EXCLUDE_REGEXP) {
-      s = s.where(
+      s.where(
         "NOT (type = 'tweet' AND (payload ->> 'text') ~* ?)",
         env.TWITTER_EXCLUDE_REGEXP
       );
@@ -23,7 +33,7 @@ module.exports = function(env, io, pgClient, socialStream) {
 
     if (env.TWITTER_EXCLUDE_SCREEN_NAME) {
       var screenNames = env.TWITTER_EXCLUDE_SCREEN_NAME.split(',');
-      s = s.where(
+      s.where(
         "NOT (type = 'tweet' AND (payload -> 'user' ->> 'screen_name') IN ?)",
         screenNames
       );
