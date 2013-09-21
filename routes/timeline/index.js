@@ -5,7 +5,7 @@ module.exports = function(env, io, pgClient, socialStream) {
   var app = express();
   var limit = 20;
 
-  var queryBuilder = function() {
+  var buildQuery = function() {
     var s = squel.select()
       .from('messages')
       .order('time', false)
@@ -22,7 +22,7 @@ module.exports = function(env, io, pgClient, socialStream) {
   };
 
   var query = function(callback) {
-    var sql = queryBuilder();
+    var sql = buildQuery();
     pgClient.query(sql,
       function(err, result) {
         if (err) {
