@@ -19,3 +19,4 @@ You need to configure the following environment variables to start aun-subscreen
 
 * NODE_ENV
 * TWITTER_EXCLUDE_REGEXP
+* TWITTER_EXCLUDE_SCREEN_NAME

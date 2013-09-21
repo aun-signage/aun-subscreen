@@ -18,6 +18,14 @@ module.exports = function(env, io, pgClient, socialStream) {
       );
     }
 
+    if (env.TWITTER_EXCLUDE_SCREEN_NAME) {
+      var screenNames = env.TWITTER_EXCLUDE_SCREEN_NAME.split(',');
+      s = s.where(
+        "NOT (type = 'tweet' AND (payload -> 'user' ->> 'screen_name') IN ?)",
+        screenNames
+      );
+    }
+
     return s.toString();
   };
 
