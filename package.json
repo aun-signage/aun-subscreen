@@ -15,6 +15,7 @@
     "jade": "",
     "express-compiless": "",
     "irc": "",
-    "squel": ""
+    "squel": "",
+    "lodash": ""
   }
 }

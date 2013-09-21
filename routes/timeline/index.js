@@ -1,15 +1,18 @@
 var express = require('express');
 var squel = require('squel');
+var misc = require('../../lib/misc');
 
 module.exports = function(env, io, pgClient, socialStream) {
   var app = express();
   var limit = 20;
 
-  var buildQuery = function() {
+  var buildQuery = function(channel) {
     var s = squel.select()
       .from('messages')
       .order('time', false)
       .limit(limit);
+
+    // TODO consider channel
 
     if (env.TWITTER_EXCLUDE_REGEXP) {
       s = s.where(
@@ -29,8 +32,8 @@ module.exports = function(env, io, pgClient, socialStream) {
     return s.toString();
   };
 
-  var query = function(callback) {
-    var sql = buildQuery();
+  var query = function(channel, callback) {
+    var sql = buildQuery(channel);
     pgClient.query(sql,
       function(err, result) {
         if (err) {
@@ -47,14 +50,23 @@ module.exports = function(env, io, pgClient, socialStream) {
   });
 
   io.sockets.on('connection', function (socket) {
-    query(function(messages) {
+    var channel = {
+      tweet: socket.handshake.query.tweet,
+      irc: socket.handshake.query.irc
+    };
+    socket.join(JSON.stringify(channel));
+
+    query(channel, function(messages) {
       socket.emit('messages', messages);
     });
   });
 
   socialStream.on('update', function(data) {
-    query(function(messages) {
-      io.sockets.emit('messages', messages);
+    var channels = misc.activeChannels(io, '');
+    channels.forEach(function(channel) {
+      query(channel, function(messages) {
+        io.sockets.emit('messages', messages);
+      });
     });
   });
 
