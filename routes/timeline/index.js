@@ -55,6 +55,7 @@ module.exports = function(env, io, pgClient, socialStream) {
       irc: socket.handshake.query.irc
     };
     socket.join(JSON.stringify(channel));
+    console.log('[%s] subscribed %j', socket.id, channel);
 
     query(channel, function(messages) {
       socket.emit('messages', messages);
