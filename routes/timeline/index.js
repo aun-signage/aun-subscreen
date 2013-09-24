@@ -1,5 +1,4 @@
 var express = require('express');
-var squel = require('squel');
 var misc = require('../../lib/misc');
 
 module.exports = function(env, io, pgClient, socialStream) {
@@ -7,44 +6,76 @@ module.exports = function(env, io, pgClient, socialStream) {
   var limit = 20;
 
   var buildQuery = function(channel) {
-    var s = squel.select()
-      .from('messages')
-      .order('time', false)
-      .limit(limit);
+    var values = [limit];
+    var placeHolderIndex = 0;
+    var val = function(value) {
+      placeHolderIndex += 1;
+      values[placeHolderIndex - 1] = value;
+      return '$' + placeHolderIndex;
+    };
+    var inVals = function(values) {
+      return 'IN (' + values.map(function(value) {
+        return val(value);
+      }).join(' ,') + ')';
+    };
 
+    var sql = "SELECT * FROM messages";
+
+    var orConds = [];
     var conds = [];
-    var values = [];
+
     if (channel.tweet) {
-      conds.push("(type = 'tweet' AND (payload ->> 'text') ~* ?)");
-      values.push(channel.tweet);
+      var tweetCond = "(payload ->> 'text') ~* " + val(channel.tweet);
+      orConds.push(tweetCond);
     }
+
     if (channel.irc) {
-      // TODO consider irc channels
-      conds.push("(type = 'irc')");
+      var channels = channel.irc.split(',').map(function(channel) {
+        return channel[0] == '#' ? channel : '#' + channel;
+      });
+      var ircCond = "(type = 'irc') AND (payload ->> 'to' " + inVals(channels) + ")";
+
+      orConds.push(ircCond);
     }
-    s.where(conds.join(" OR "), values);
+
+    if (orConds.length > 0) {
+      var orCondsStr = orConds.map(function(cond) {
+        return "(" + cond + ")";
+      }).join(" OR ");
+      conds.push(orCondsStr);
+    }
 
     if (env.TWITTER_EXCLUDE_REGEXP) {
-      s.where(
-        "NOT (type = 'tweet' AND (payload ->> 'text') ~* ?)",
-        env.TWITTER_EXCLUDE_REGEXP
+      conds.push(
+        "NOT (type = 'tweet' AND (payload ->> 'text') ~* " +
+        val(env.TWITTER_EXCLUDE_REGEXP) + ")"
       );
     }
 
     if (env.TWITTER_EXCLUDE_SCREEN_NAME) {
       var screenNames = env.TWITTER_EXCLUDE_SCREEN_NAME.split(',');
-      s.where(
-        "NOT (type = 'tweet' AND (payload -> 'user' ->> 'screen_name') IN ?)",
-        screenNames
+      conds.push(
+        "NOT (type = 'tweet' AND (payload -> 'user' ->> 'screen_name') " +
+        inVals(screenNames) + ")"
       );
     }
 
-    return s.toString();
-  };
+    if (conds.length > 0) {
+      sql += " WHERE " + conds.map(function(cond) {
+        return "(" + cond + ")";
+      }).join(" AND ");
+    }
+
+    sql += " ORDER BY time DESC";
+    sql += " LIMIT " + val(limit);
+
+    return {sql: sql, values: values};
+  }
 
   var query = function(channel, callback) {
-    var sql = buildQuery(channel);
-    pgClient.query(sql,
+    var q = buildQuery(channel);
+    pgClient.query(q.sql,
+      q.values,
       function(err, result) {
         if (err) {
           throw 'Error in selecting ' + err;
