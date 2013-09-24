@@ -62,11 +62,7 @@ module.exports = function(env, io, pgClient, socialStream) {
 
     if (channel.irc) {
       var channels = channel.irc.split(',').map(function(channel) {
-        if (channel[0] == '#') {
-          return channel;
-        } else {
-          return '#' + channel;
-        }
+        return channel[0] == '#' ? channel : '#' + channel;
       });
       var inCond = 'IN (' + channels.map(function(channel) {
         return val(channel);
