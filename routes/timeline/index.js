@@ -64,6 +64,8 @@ module.exports = function(env, io, pgClient, socialStream) {
       sql += " WHERE " + conds.map(function(cond) {
         return "(" + cond + ")";
       }).join(" OR ");
+    } else {
+      sql += " WHERE FALSE"
     }
 
     sql += " ORDER BY time DESC";
