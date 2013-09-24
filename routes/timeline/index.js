@@ -51,7 +51,9 @@ module.exports = function(env, io, pgClient, socialStream) {
       return '$' + placeHolderIndex;
     };
 
-    var sql = "SELECT * FROM messages LIMIT " + val(limit);
+    var sql = "SELECT * FROM messages";
+    sql += " ORDER BY time DESC";
+    sql += " LIMIT " + val(limit);
 
     return {sql: sql, values: values};
   }
