@@ -68,8 +68,10 @@ module.exports = function(env, io, pgClient, socialStream) {
           return '#' + channel;
         }
       });
-      var ircCond = "(type = 'irc') AND (payload ->> 'to' = " + val(channels[0]) + ")";
-      // XXX doesn't work with multiple channels
+      var inCond = 'IN (' + channels.map(function(channel) {
+        return val(channel);
+      }).join(' ,') + ')';
+      var ircCond = "(type = 'irc') AND (payload ->> 'to' " + inCond + ")";
 
       conds.push(ircCond);
     }
