@@ -1,11 +1,11 @@
 var express = require('express');
-var squel = require('squel');
 var misc = require('../../lib/misc');
 
 module.exports = function(env, io, pgClient, socialStream) {
   var app = express();
   var limit = 20;
 
+  /*
   var buildQuery = function(channel) {
     var s = squel.select()
       .from('messages')
@@ -41,10 +41,18 @@ module.exports = function(env, io, pgClient, socialStream) {
 
     return s.toString();
   };
+ */
+  var buildQuery = function(channel) {
+    var sql = "SELECT * FROM messages LIMIT $1";
+    var values = [limit];
+
+    return {sql: sql, values: values};
+  }
 
   var query = function(channel, callback) {
-    var sql = buildQuery(channel);
-    pgClient.query(sql,
+    var q = buildQuery(channel);
+    pgClient.query(q.sql,
+      q.values,
       function(err, result) {
         if (err) {
           throw 'Error in selecting ' + err;
