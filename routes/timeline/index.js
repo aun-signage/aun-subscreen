@@ -52,6 +52,20 @@ module.exports = function(env, io, pgClient, socialStream) {
     };
 
     var sql = "SELECT * FROM messages";
+
+    var conds = [];
+
+    if (channel.tweet) {
+      var tweetCond = "(payload ->> 'text') ~* " + val(channel.tweet);
+      conds.push(tweetCond);
+    }
+
+    if (conds.length > 0) {
+      sql += " WHERE " + conds.map(function(cond) {
+        return "(" + cond + ")";
+      }).join(" OR ");
+    }
+
     sql += " ORDER BY time DESC";
     sql += " LIMIT " + val(limit);
 
