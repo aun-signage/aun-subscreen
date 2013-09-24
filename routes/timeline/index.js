@@ -43,14 +43,22 @@ module.exports = function(env, io, pgClient, socialStream) {
   };
  */
   var buildQuery = function(channel) {
-    var sql = "SELECT * FROM messages LIMIT $1";
     var values = [limit];
+    var placeHolderIndex = 0;
+    var val = function(value) {
+      placeHolderIndex += 1;
+      values[placeHolderIndex - 1] = value;
+      return '$' + placeHolderIndex;
+    };
+
+    var sql = "SELECT * FROM messages LIMIT " + val(limit);
 
     return {sql: sql, values: values};
   }
 
   var query = function(channel, callback) {
     var q = buildQuery(channel);
+    console.log(q);
     pgClient.query(q.sql,
       q.values,
       function(err, result) {
