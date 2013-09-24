@@ -60,6 +60,20 @@ module.exports = function(env, io, pgClient, socialStream) {
       conds.push(tweetCond);
     }
 
+    if (channel.irc) {
+      var channels = channel.irc.split(',').map(function(channel) {
+        if (channel[0] == '#') {
+          return channel;
+        } else {
+          return '#' + channel;
+        }
+      });
+      var ircCond = "(type = 'irc') AND (payload ->> 'to' = " + val(channels[0]) + ")";
+      // XXX doesn't work with multiple channels
+
+      conds.push(ircCond);
+    }
+
     if (conds.length > 0) {
       sql += " WHERE " + conds.map(function(cond) {
         return "(" + cond + ")";
