@@ -53,11 +53,12 @@ module.exports = function(env, io, pgClient, socialStream) {
 
     var sql = "SELECT * FROM messages";
 
+    var orConds = [];
     var conds = [];
 
     if (channel.tweet) {
       var tweetCond = "(payload ->> 'text') ~* " + val(channel.tweet);
-      conds.push(tweetCond);
+      orConds.push(tweetCond);
     }
 
     if (channel.irc) {
@@ -69,15 +70,20 @@ module.exports = function(env, io, pgClient, socialStream) {
       }).join(' ,') + ')';
       var ircCond = "(type = 'irc') AND (payload ->> 'to' " + inCond + ")";
 
-      conds.push(ircCond);
+      orConds.push(ircCond);
+    }
+
+    if (orConds.length > 0) {
+      var orCondsStr = orConds.map(function(cond) {
+        return "(" + cond + ")";
+      }).join(" OR ");
+      conds.push(orCondsStr);
     }
 
     if (conds.length > 0) {
       sql += " WHERE " + conds.map(function(cond) {
         return "(" + cond + ")";
-      }).join(" OR ");
-    } else {
-      sql += " WHERE FALSE"
+      }).join(" AND ");
     }
 
     sql += " ORDER BY time DESC";
