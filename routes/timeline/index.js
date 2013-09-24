@@ -103,12 +103,19 @@ module.exports = function(env, io, pgClient, socialStream) {
     });
   });
 
+  var lastMessagesJson = {};
+
   socialStream.on('update', function(data) {
     var channels = misc.activeChannels(io, '');
     channels.forEach(function(channelJson) {
       var channel = JSON.parse(channelJson);
       query(channel, function(messages) {
-        io.sockets.in(channelJson).emit('messages', messages);
+        // Do not send the same messages on every update
+        var messagesJson = JSON.stringify(messages);
+        if (lastMessagesJson[channelJson] != messagesJson) {
+          lastMessagesJson[channelJson] = messagesJson;
+          io.sockets.in(channelJson).emit('messages', messages);
+        }
       });
     });
   });
