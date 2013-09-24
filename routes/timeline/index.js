@@ -50,6 +50,11 @@ module.exports = function(env, io, pgClient, socialStream) {
       values[placeHolderIndex - 1] = value;
       return '$' + placeHolderIndex;
     };
+    var inVals = function(values) {
+      return 'IN (' + values.map(function(value) {
+        return val(value);
+      }).join(' ,') + ')';
+    };
 
     var sql = "SELECT * FROM messages";
 
@@ -65,10 +70,7 @@ module.exports = function(env, io, pgClient, socialStream) {
       var channels = channel.irc.split(',').map(function(channel) {
         return channel[0] == '#' ? channel : '#' + channel;
       });
-      var inCond = 'IN (' + channels.map(function(channel) {
-        return val(channel);
-      }).join(' ,') + ')';
-      var ircCond = "(type = 'irc') AND (payload ->> 'to' " + inCond + ")";
+      var ircCond = "(type = 'irc') AND (payload ->> 'to' " + inVals(channels) + ")";
 
       orConds.push(ircCond);
     }
