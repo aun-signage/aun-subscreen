@@ -82,6 +82,21 @@ module.exports = function(env, io, pgClient, socialStream) {
       conds.push(orCondsStr);
     }
 
+    if (env.TWITTER_EXCLUDE_REGEXP) {
+      conds.push(
+        "NOT (type = 'tweet' AND (payload ->> 'text') ~* " +
+        val(env.TWITTER_EXCLUDE_REGEXP) + ")"
+      );
+    }
+
+    if (env.TWITTER_EXCLUDE_SCREEN_NAME) {
+      var screenNames = env.TWITTER_EXCLUDE_SCREEN_NAME.split(',');
+      conds.push(
+        "NOT (type = 'tweet' AND (payload -> 'user' ->> 'screen_name') " +
+        inVals(screenNames) + ")"
+      );
+    }
+
     if (conds.length > 0) {
       sql += " WHERE " + conds.map(function(cond) {
         return "(" + cond + ")";
