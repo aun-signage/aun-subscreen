@@ -111,7 +111,6 @@ module.exports = function(env, io, pgClient, socialStream) {
 
   var query = function(channel, callback) {
     var q = buildQuery(channel);
-    console.log(q);
     pgClient.query(q.sql,
       q.values,
       function(err, result) {
