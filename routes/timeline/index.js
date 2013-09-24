@@ -5,43 +5,6 @@ module.exports = function(env, io, pgClient, socialStream) {
   var app = express();
   var limit = 20;
 
-  /*
-  var buildQuery = function(channel) {
-    var s = squel.select()
-      .from('messages')
-      .order('time', false)
-      .limit(limit);
-
-    var conds = [];
-    var values = [];
-    if (channel.tweet) {
-      conds.push("(type = 'tweet' AND (payload ->> 'text') ~* ?)");
-      values.push(channel.tweet);
-    }
-    if (channel.irc) {
-      // TODO consider irc channels
-      conds.push("(type = 'irc')");
-    }
-    s.where(conds.join(" OR "), values);
-
-    if (env.TWITTER_EXCLUDE_REGEXP) {
-      s.where(
-        "NOT (type = 'tweet' AND (payload ->> 'text') ~* ?)",
-        env.TWITTER_EXCLUDE_REGEXP
-      );
-    }
-
-    if (env.TWITTER_EXCLUDE_SCREEN_NAME) {
-      var screenNames = env.TWITTER_EXCLUDE_SCREEN_NAME.split(',');
-      s.where(
-        "NOT (type = 'tweet' AND (payload -> 'user' ->> 'screen_name') IN ?)",
-        screenNames
-      );
-    }
-
-    return s.toString();
-  };
- */
   var buildQuery = function(channel) {
     var values = [limit];
     var placeHolderIndex = 0;
