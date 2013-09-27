@@ -56,11 +56,13 @@ psql -f db/ddl.sql [DATABASE_URL]
 
 Note: This requires local setup of `psql` command.
 
-## Restart
+
+## Push code
 
 ```
-heroku restart
+git push heroku master
 ```
+
 
 # Configuration {#Configuration}
 
