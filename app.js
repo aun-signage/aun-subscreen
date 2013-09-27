@@ -28,6 +28,7 @@ io.configure(function () {
   if (process.env.NODE_ENV == 'production') {
     io.set('log level', 1);
     io.enable('browser client minification');
+    io.enable('browser client etag');
     io.enable('browser client gzip');
   } else {
     io.set('log colors', true);
