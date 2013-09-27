@@ -1,4 +1,8 @@
-# aun: the kaigi signage system
+# aun-subscreen: the kaigi subscreen system
+
+`aun-subscreen` is a re-implementation of a subset of *aun*, the kaigi signage system, which was operated at [RubyKaigi 2013](http://rubykaigi.org/2013). Since *aun* has lots of "RubyKaigi" specific features, it is too much for regular purpose.
+
+`aun-subscreen` is just for "subscreen", which gives a timeline views of tweets and IRC messages. By keeping the scope small, the deployment becomes much more simple. We, aun team, want to see *aun* energizes the communication in many conferences.
 
 # Requirements
 
