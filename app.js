@@ -43,6 +43,10 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
+app.configure(function() {
+  app.enable('trust proxy');
+});
+
 app.configure('development', function() {
   app.use(express.logger('dev'));
 });
