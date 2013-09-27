@@ -64,7 +64,7 @@ git push heroku master
 ```
 
 
-# Configuration {#Configuration}
+# Configuration
 
 You need to configure `aun-subscreen` with environment variables.
 This is to play with PaaS deployment, such as [heroku](https://www.heroku.com/).
