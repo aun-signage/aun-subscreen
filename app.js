@@ -43,6 +43,14 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
+app.configure('development', function() {
+  app.use(express.logger('dev'));
+});
+
+app.configure('production', function() {
+  app.use(express.logger());
+});
+
 var socialStream = new SocialStream(process.env, pgClient);
 app.use(require('./routes/timeline')(process.env, io, pgClient, socialStream));
 
