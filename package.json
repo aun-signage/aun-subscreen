@@ -1,7 +1,7 @@
 {
   "name": "aun-subscreen",
   "version": "0.0.0",
-  "description": "aun: kaigi signage system",
+  "description": "aun-subscreen: the kaigi subscreen system",
   "scripts": {
     "start": "node app.js"
   },
