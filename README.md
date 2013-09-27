@@ -9,7 +9,60 @@
 * [Node.js](http://nodejs.org/)
 * [PostgreSQL](http://www.postgresql.org/) 9.3 (won't work with 9.2.x)
 
-# Configuration
+# Deployment
+
+Create an application:
+
+```
+heroku create [Your Application Name]
+```
+
+## Set environment variables
+
+See [below](#Configuration).
+
+## Prepare database
+
+See [documents](https://devcenter.heroku.com/articles/heroku-postgresql) for detail.
+
+Create database:
+
+```
+$ heroku addons:add heroku-postgresql:dev --version=9.3
+Adding heroku-postgresql:dev on aun-subscreen... done, v7 (free)
+Attached as HEROKU_POSTGRESQL_ORANGE_URL
+Database has been created and is available
+ ! This database is empty. If upgrading, you can transfer
+ ! data from another database with pgbackups:restore.
+Use `heroku addons:docs heroku-postgresql` to view documentation.
+```
+
+Make sure to add `--version=9.3` option. The part `HEROKU_POSTGRESQL_ORANGE_URL` may vary.
+
+Attach database:
+
+```
+heroku pg:promote HEROKU_POSTGRESQL_ORANGE_URL
+Promoting HEROKU_POSTGRESQL_ORANGE_URL to DATABASE_URL... done
+```
+
+(Specify the same url as result in `addons:add heroku-postgresql:dev`)
+
+Load ddl:
+
+```
+psql -f db/ddl.sql [DATABASE_URL]
+```
+
+Note: This requires local setup of `psql` command.
+
+## Restart
+
+```
+heroku restart
+```
+
+# Configuration {#Configuration}
 
 You need to configure `aun-subscreen` with environment variables.
 This is to play with PaaS deployment, such as [heroku](https://www.heroku.com/).
@@ -34,7 +87,6 @@ heroku will set this automatically.
 ### DATABASE\_URL
 
 URL to PostgreSQL.
-heroku will set this automatically.
 
 ## Twitter Receiver Configurations
 
@@ -133,3 +185,4 @@ TWITTER_EXCLUDE_SCREEN_NAME=[Screen Names]
 ```
 
 * `TWITTER_EXCLUDE_SCREEN_NAME` should be comma separated
+
