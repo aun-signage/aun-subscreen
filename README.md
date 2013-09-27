@@ -2,7 +2,7 @@
 
 `aun-subscreen` is a re-implementation of a subset of *aun*, the kaigi signage system, which was operated at [RubyKaigi 2013](http://rubykaigi.org/2013). Since *aun* has lots of "RubyKaigi" specific features, it is too much for regular purpose.
 
-`aun-subscreen` is just for "subscreen", which gives a timeline views of tweets and IRC messages. By keeping the scope small, the deployment becomes much more simple. We, aun team, hope to see *aun* energizes the communication in many conferences!
+`aun-subscreen` is just for "subscreen", which gives a timeline views of tweets and IRC messages. By keeping the scope small, the deployment becomes much more simple. We, team aun, hope to see *aun* energizes the communication in many conferences!
 
 # Requirements
 
@@ -186,3 +186,13 @@ TWITTER_EXCLUDE_SCREEN_NAME=[Screen Names]
 
 * `TWITTER_EXCLUDE_SCREEN_NAME` should be comma separated
 
+# Team aun
+
+* [Yoji Shidara](https://github.com/darashi)
+* [Jun Ohwada](https://github.com/june29)
+* [Kei Shiratsuchi](https://github.com/kei-s)
+* [Kengo Hamasaki](https://github.com/hmsk)
+
+## Special Thanks!!
+
+* [Norio Shimizu](https://github.com/norio)
