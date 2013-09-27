@@ -188,6 +188,28 @@ TWITTER_EXCLUDE_SCREEN_NAME=[Screen Names]
 
 * `TWITTER_EXCLUDE_SCREEN_NAME` should be comma separated
 
+# Usage
+
+Open `http://[Your Application Name].herokuapp.com` with your web browser.
+
+You will see all messages received.
+
+## Query parameters
+
+You can have different views by specifying query parameters.
+
+### tweet
+
+If you specify `?tweet=[Twitter Filtering Regexp]`, tweets matching with the regexp are shown.
+
+### irc
+
+If you specify `?irc=test`, only messages on `#test` channels are shown. You can provide multiple channels separating with comma. If you want to show channels `#test1` and `#test2`, you need to specify `?irc=test1,test2`.
+
+### Combination
+
+You can use `tweet` and `irc` parameters in combination. `?tweet=example&irc=test` will show tweets containing `example` in text and messages from IRC channel `#test`.
+
 # Team aun
 
 * [Yoji Shidara](https://github.com/darashi)
