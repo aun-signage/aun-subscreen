@@ -90,6 +90,11 @@ heroku will set this automatically.
 
 URL to PostgreSQL.
 
+
+### MESSAGES\_LIMIT
+
+TODO
+
 ## Twitter Receiver Configurations
 
 If you want to receive twitter stream, you need to set these variables.
