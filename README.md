@@ -129,7 +129,7 @@ IRC_SERVER=irc.example.com
 ```
 
 
-### IRC\_PORT
+### IRC\_PORT (optional)
 
 Port number of the IRC server.
 
