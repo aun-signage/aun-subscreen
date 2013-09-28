@@ -83,7 +83,7 @@ module.exports = function(env, io, pgClient, socialStream) {
         if (err) {
           throw 'Error in selecting ' + err;
         }
-        console.info('Searched for channel %s (in %d ms)', channelJson, elapsed);
+        console.info('Searched %s in %dms', channelJson, elapsed);
         callback(result.rows);
       }
     );
