@@ -61,4 +61,5 @@ var socialStream = new SocialStream(process.env, pgClient);
 app.use(require('./routes/timeline')(process.env, io, pgClient, socialStream));
 
 app.use(compiless({root: __dirname + '/public'}));
+app.use('/components', express.static(__dirname + '/bower_components'));
 app.use(express.static(__dirname + '/public'));
