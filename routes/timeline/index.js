@@ -73,13 +73,17 @@ module.exports = function(env, io, pgClient, socialStream) {
   }
 
   var query = function(channel, callback) {
+    var startAt = new Date();
+    var channelJson = JSON.stringify(channel);
     var q = buildQuery(channel);
     pgClient.query(q.sql,
       q.values,
       function(err, result) {
+        var elapsed = new Date() - startAt;
         if (err) {
           throw 'Error in selecting ' + err;
         }
+        console.info('Searched for channel %s (in %d ms)', channelJson, elapsed);
         callback(result.rows);
       }
     );
@@ -99,11 +103,8 @@ module.exports = function(env, io, pgClient, socialStream) {
     socket.join(channelJson);
     console.log('[%s] subscribed %j', socket.id, channel);
 
-    var startAt = new Date();
     query(channel, function(messages) {
-      var elapsed = new Date() - startAt;
       socket.emit('messages', messages);
-      console.info('Searched for channel %s (in %d ms)', channelJson, elapsed);
     });
   });
 
