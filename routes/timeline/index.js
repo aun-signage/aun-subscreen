@@ -95,11 +95,15 @@ module.exports = function(env, io, pgClient, socialStream) {
       tweet: socket.handshake.query.tweet,
       irc: socket.handshake.query.irc
     };
-    socket.join(JSON.stringify(channel));
+    var channelJson = JSON.stringify(channel);
+    socket.join(channelJson);
     console.log('[%s] subscribed %j', socket.id, channel);
 
+    var startAt = new Date();
     query(channel, function(messages) {
+      var elapsed = new Date() - startAt;
       socket.emit('messages', messages);
+      console.info('Searched for channel %s (in %d ms)', channelJson, elapsed);
     });
   });
 
