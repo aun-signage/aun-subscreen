@@ -148,7 +148,7 @@ Port number of the IRC server.
 Example:
 
 ```
-PORT=6667
+IRC_PORT=6667
 ```
 
 ### IRC\_NICK
