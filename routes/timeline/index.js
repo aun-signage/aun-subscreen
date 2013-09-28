@@ -47,7 +47,7 @@ module.exports = function(env, io, pgClient, socialStream) {
 
     if (env.TWITTER_EXCLUDE_REGEXP) {
       conds.push(
-        "NOT (type = 'tweet' AND (payload ->> 'text') ~* " +
+        "NOT (type = 'tweet' AND text ~* " +
         val(env.TWITTER_EXCLUDE_REGEXP) + ")"
       );
     }
