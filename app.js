@@ -46,6 +46,7 @@ io.sockets.on('connection', function (socket) {
 
 app.configure(function() {
   app.enable('trust proxy');
+  app.use(express.compress());
 });
 
 app.configure('development', function() {
