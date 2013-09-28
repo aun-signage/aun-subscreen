@@ -91,7 +91,7 @@ heroku will set this automatically.
 URL to PostgreSQL.
 
 
-### MESSAGES\_LIMIT
+### MESSAGES\_LIMIT (optional)
 
 Rough number of messages to keep in DB. This does not work exactly due to restriction of implementation.
 As Heroku Postgres Dev database can keep only 10,000 rows, say, 9,500 will be reasonable value including margin.
@@ -99,6 +99,8 @@ As Heroku Postgres Dev database can keep only 10,000 rows, say, 9,500 will be re
 ```
 MESSAGES_LIMIT=9500
 ```
+
+If none specified, all messages will be kept.
 
 ## Twitter Receiver Configurations
 
