@@ -25,7 +25,7 @@ module.exports = function(env, io, pgClient, socialStream) {
     var conds = [];
 
     if (channel.tweet) {
-      var tweetCond = "(payload ->> 'text') ~* " + val(channel.tweet);
+      var tweetCond = "text ~* " + val(channel.tweet);
       orConds.push(tweetCond);
     }
 
