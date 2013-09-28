@@ -6,3 +6,6 @@ CREATE TABLE messages (
   text CHARACTER VARYING(255) NOT NULL,
   payload JSON NOT NULL
 );
+
+DROP INDEX IF EXISTS messages_time;
+CREATE INDEX messages_time ON messages (time);
