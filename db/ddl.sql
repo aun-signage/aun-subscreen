@@ -9,3 +9,10 @@ CREATE TABLE messages (
 
 DROP INDEX IF EXISTS messages_time;
 CREATE INDEX messages_time ON messages (time);
+
+DROP INDEX IF EXISTS messages_channel;
+CREATE INDEX messages_channel ON messages ((payload ->> 'to')) WHERE type = 'irc';
+
+DROP INDEX IF EXISTS messages_screen_name;
+CREATE INDEX messages_screen_name ON messages ((payload -> 'user' ->> 'screen_name')) WHERE type = 'tweet';
+
