@@ -114,11 +114,6 @@ jQuery(document).ready(function($) {
   var ViewModel = function(socket) {
     var self = this;
     var mySocket = socket;
-    var mapping = {
-      key: function(data) {
-        return ko.utils.unwrapObservable(data.id);
-      }
-    };
 
     self.messages = ko.observableArray();
 
