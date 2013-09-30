@@ -1,8 +1,6 @@
 extends ../../views/layout
 
 append head
-  script(src="/js/aun-subscreen.js")
-
   script(type="text/html", id="message-template")
     li
       .tweet-binder(data-bind="if: type == 'tweet'")

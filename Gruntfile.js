@@ -10,10 +10,25 @@ module.exports = function(grunt) {
           'public/css/application.css': 'assets/css/application.less'
         }
       }
+    },
+    concat: {
+      dist: {
+        src: [
+          'bower_components/jquery/jquery.min.js',
+          'bower_components/bootstrap/dist/js/bootstrap.min.js',
+          'assets/js/knockout-3.0.0beta.js',
+          'assets/js/aun-subscreen.js'
+        ],
+        dest: 'public/js/application.js'
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-concat');
 
-  grunt.registerTask('default', ['less:production']);
+  grunt.registerTask('default', [
+    'less:production',
+    'concat'
+  ]);
 };
