@@ -3,7 +3,6 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var pg = require('pg');
-var compiless = require('express-compiless');
 
 var SocialStream = require('./lib/social-stream');
 
@@ -60,5 +59,4 @@ app.configure('production', function() {
 var socialStream = new SocialStream(process.env, pgClient);
 app.use(require('./routes/timeline')(process.env, io, pgClient, socialStream));
 
-app.use(compiless({root: __dirname + '/public'}));
 app.use(express.static(__dirname + '/public'));
