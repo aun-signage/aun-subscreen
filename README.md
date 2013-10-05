@@ -19,7 +19,7 @@ heroku create [Your Application Name]
 
 ## Set environment variables
 
-See [below](#Configuration).
+See [below](#configuration).
 
 ## Prepare database
 
