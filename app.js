@@ -21,9 +21,6 @@ server.listen(port, function() {
 });
 
 io.configure(function () {
-  io.set('transports', ['xhr-polling']);
-  io.set('polling duration', 10);
-
   if (process.env.NODE_ENV == 'production') {
     io.set('log level', 1);
     io.enable('browser client minification');
