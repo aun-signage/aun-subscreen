@@ -141,8 +141,8 @@ jQuery(document).ready(function($) {
 
     self.messages = ko.observableArray();
 
-    mySocket.on('messages', function(messages) {
-      self.messages(messages);
+    mySocket.on('update', function(data) {
+      self.messages(data.messages);
     });
   };
 

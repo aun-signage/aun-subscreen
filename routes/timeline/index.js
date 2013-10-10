@@ -104,7 +104,7 @@ module.exports = function(env, io, pgClient, socialStream) {
     console.log('[%s] subscribed %j', socket.id, channel);
 
     query(channel, function(messages) {
-      socket.emit('messages', messages);
+      socket.emit('update', {messages: messages});
     });
   });
 
@@ -119,7 +119,7 @@ module.exports = function(env, io, pgClient, socialStream) {
         var messagesJson = JSON.stringify(messages);
         if (lastMessagesJson[channelJson] != messagesJson) {
           lastMessagesJson[channelJson] = messagesJson;
-          io.sockets.in(channelJson).emit('messages', messages);
+          io.sockets.in(channelJson).emit('update', {messages: messages});
         }
       });
     });
