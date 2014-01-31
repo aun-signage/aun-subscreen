@@ -141,7 +141,7 @@ jQuery(document).ready(function($) {
     var mapping = {
       messages: {
         key: function(data) {
-          return ko.utils.unwrapObservable(data.id);
+          return ko.unwrap(data.id);
         }
       }
     };
