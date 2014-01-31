@@ -16,7 +16,7 @@ module.exports = function(grunt) {
         src: [
           'bower_components/jquery/jquery.min.js',
           'bower_components/bootstrap/dist/js/bootstrap.min.js',
-          'assets/js/knockout-3.0.0rc.js',
+          'assets/js/knockout-3.0.0.js',
           'assets/js/knockout.mapping-latest.js',
           'assets/js/aun-subscreen.js'
         ],
