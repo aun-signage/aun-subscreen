@@ -1,3 +1,4 @@
+var http = require('http');
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -52,6 +53,18 @@ app.configure('development', function() {
 app.configure('production', function() {
   app.use(express.logger());
 });
+
+var herokuUrl = process.env.HEROKU_URL;
+if (herokuUrl) {
+  console.log('Keepalive configured: ' + herokuUrl);
+  setInterval(function() {
+    http.get(herokuUrl, function(res) {
+      console.log('Keepalive: ' + res.statusCode);
+    }).on('error', function(err) {
+      console.log('Error in ping: ' + err.message);
+    });
+  }, 20 * 60 * 1000);
+}
 
 var socialStream = new SocialStream(process.env, pgClient);
 app.use(require('./routes/timeline')(process.env, io, pgClient, socialStream));

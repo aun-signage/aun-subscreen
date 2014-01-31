@@ -108,6 +108,15 @@ MESSAGES_LIMIT=9500
 
 If none specified, all messages will be kept.
 
+### HEROKU\_URL (optional)
+
+Periodically ping this URL if specified to keep alive.
+This is especially useful for deployment on heroku, since heroku gets down inactive web dynos unless more than one dynos reserved.
+
+```
+HEROKU_URL=http://[your-app-name].herokuapp.com
+```
+
 ## Twitter Receiver Configurations
 
 If you want to receive twitter stream, you need to set these variables.
