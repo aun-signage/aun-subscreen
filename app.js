@@ -25,7 +25,7 @@ pgClient.query(
       throw err;
     } else {
       if (!result.rows[0].exists) {
-        misc.initializeDataBase(pgClient);
+        misc.initializeDataBase(databaseUrl);
       }
     }
   }
@@ -90,4 +90,4 @@ var auth = express.basicAuth(
   process.env.ADMIN_PASSWORD || 'admin'
 );
 app.use(auth)
-app.use(require('./routes/setup/database')(process.env, pgClient));
+app.use(require('./routes/setup/database')(process.env, databaseUrl));
