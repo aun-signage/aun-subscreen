@@ -9,12 +9,16 @@
 * [Node.js](http://nodejs.org/)
 * [PostgreSQL](http://www.postgresql.org/) 9.3 (won't work with 9.2.x)
 
-# Deployment
+# Deployment to Heroku
 
-Create an application:
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+or Setup as below
+
+##  Create application
 
 ```
-heroku create [Your Application Name]
+$ heroku create [Your Application Name]
 ```
 
 ## Set environment variables
