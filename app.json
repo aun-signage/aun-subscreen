@@ -8,7 +8,7 @@
     "irc",
     "conference"
   ],
-  "success_url": "/initialize",
+  "success_url": "/",
   "env": {
     "NODE_ENV": "production",
     "ADMIN_USERNAME": {

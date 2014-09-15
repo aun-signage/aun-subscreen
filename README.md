@@ -52,15 +52,6 @@ Promoting HEROKU_POSTGRESQL_AMBER_URL (DATABASE_URL) to DATABASE_URL... done
 
 (Specify the same url as result in `addons:add heroku-postgresql:dev`)
 
-Load ddl:
-
-```
-psql -f db/ddl.sql [DATABASE_URL]
-```
-
-Note: This requires local setup of `psql` command.
-
-
 ## Push code
 
 ```
