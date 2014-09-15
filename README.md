@@ -17,12 +17,6 @@ Create an application:
 heroku create [Your Application Name]
 ```
 
-Enable Websockets:
-
-```
-heroku labs:enable websockets
-```
-
 ## Set environment variables
 
 See [below](#configuration).
