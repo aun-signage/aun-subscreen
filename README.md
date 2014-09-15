@@ -29,21 +29,21 @@ Create database:
 
 ```
 $ heroku addons:add heroku-postgresql:dev --version=9.3
-Adding heroku-postgresql:dev on aun-subscreen... done, v7 (free)
-Attached as HEROKU_POSTGRESQL_ORANGE_URL
+Adding heroku-postgresql:dev on aun-subscreen... done, v4 (free)
+Attached as HEROKU_POSTGRESQL_AMBER_URL
 Database has been created and is available
  ! This database is empty. If upgrading, you can transfer
  ! data from another database with pgbackups:restore.
 Use `heroku addons:docs heroku-postgresql` to view documentation.
 ```
 
-Make sure to add `--version=9.3` option. The part `HEROKU_POSTGRESQL_ORANGE_URL` may vary.
+Make sure to add `--version=9.3` option. The part `HEROKU_POSTGRESQL_AMBER_URL` may vary.
 
 Attach database:
 
 ```
-heroku pg:promote HEROKU_POSTGRESQL_ORANGE_URL
-Promoting HEROKU_POSTGRESQL_ORANGE_URL to DATABASE_URL... done
+$ heroku pg:promote HEROKU_POSTGRESQL_AMBER_URL
+Promoting HEROKU_POSTGRESQL_AMBER_URL (DATABASE_URL) to DATABASE_URL... done
 ```
 
 (Specify the same url as result in `addons:add heroku-postgresql:dev`)
