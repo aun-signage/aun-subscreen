@@ -38,31 +38,54 @@ ul#messages {
       border-bottom: 2px solid #bbb;
       color: #333;
       text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+      word-wrap: break-word;
 
-      .user {
-        .screen_name {
-          display: inline-block;
-          height: 48px;
-          margin-right: 10px;
-          padding: 0 10px;
-          line-height: 48px;
-          font-size: 36px;
-          font-weight: bold;
-          background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#222));
-          -webkit-border-top-right-radius: 5px;
-          -webkit-border-bottom-right-radius: 5px;
-          -moz-border-radius-topright: 5px;
-          -moz-border-radius-bottomright: 5px;
-          border-top-right-radius: 5px;
-          border-bottom-right-radius: 5px;
-          color: #fff;
-          text-shadow: 0 -1px 0 rgba(0, 0, 0, 1);
-          text-decoration: none;
+      .header {
+        padding: 0 10px 0 0;
+        display: inline-block;
+        height: 48px;
+        margin-right: 10px;
+        line-height: 48px;
+        font-size: 36px;
+        background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#222));
+        -webkit-border-top-right-radius: 5px;
+        -webkit-border-bottom-right-radius: 5px;
+        -moz-border-radius-topright: 5px;
+        -moz-border-radius-bottomright: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        color: #fff;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 1);
+        text-decoration: none;
+
+        span.user {
+          display:inline-block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          .icon {
+            margin-right: 10px;
+            padding: 1px 0 1px 1px;
+          }
+          .name {
+            margin-right: 10px;
+            font-weight: bold;
+          }
+          .screen_name {
+            margin-right: 10px;
+          }
+          .twitter-icon {
+            margin: 0;
+            padding-top: 4px;
+            font-size: 42px;
+          }
         }
       }
 
-      .message {
+      .body {
+        margin: 0 10px 0 10px;
         font-size: 42px;
+        font-weight: bold;
       }
 
       * {
