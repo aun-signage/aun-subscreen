@@ -70,3 +70,10 @@ var socialStream = new SocialStream(process.env, pgClient);
 app.use(require('./routes/timeline')(process.env, io, pgClient, socialStream));
 
 app.use(express.static(__dirname + '/public'));
+
+var auth = express.basicAuth(
+  process.env.ADMIN_USERNAME || 'admin',
+  process.env.ADMIN_PASSWORD || 'admin'
+);
+app.use(auth)
+app.use(require('./routes/setup/database')(process.env, pgClient));
