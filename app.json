@@ -8,9 +8,15 @@
     "irc",
     "conference"
   ],
-  "success_url": "/",
+  "success_url": "/initialize",
   "env": {
     "NODE_ENV": "production",
+    "ADMIN_USERNAME": {
+      "value": "admin"
+    },
+    "ADMIN_PASSWORD": {
+      "generator": "secret"
+    },
     "MESSAGES_LIMIT": {
       "description": "Heroku Postgres Dev database can keep only 10,000 rows, say, 9,500 will be reasonable value including margin.",
       "value": "9500"
