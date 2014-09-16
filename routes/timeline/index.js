@@ -3,7 +3,7 @@ var misc = require('../../lib/misc');
 
 module.exports = function(env, io, pgClient, socialStream) {
   var app = express();
-  var limit = 20;
+  var limit = 50;
 
   var buildQuery = function(channel) {
     var values = [limit];
