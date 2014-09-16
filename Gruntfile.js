@@ -26,7 +26,9 @@ module.exports = function(grunt) {
     copy: {
       dist: {
         files: [{
-          src: ['bower_components/fontawesome/fonts/*'],
+          expand: true,
+          cwd: "bower_components/fontawesome/fonts/",
+          src: '*',
           dest: 'public/fonts/'
         }]
       }
