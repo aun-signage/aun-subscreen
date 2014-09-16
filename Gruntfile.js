@@ -22,14 +22,24 @@ module.exports = function(grunt) {
         ],
         dest: 'public/js/application.js'
       }
+    },
+    copy: {
+      dist: {
+        files: [{
+          src: ['bower_components/fontawesome/fonts/*'],
+          dest: 'public/fonts/'
+        }]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('default', [
     'less:production',
-    'concat'
+    'concat',
+    'copy'
   ]);
 };
