@@ -4,6 +4,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var pg = require('pg');
+var misc = require('./lib/misc');
 
 var SocialStream = require('./lib/social-stream');
 
@@ -16,6 +17,19 @@ pgClient.connect(function(err) {
     throw 'failed to connect postgres: ' + err;
   }
 });
+
+pgClient.query(
+  'SELECT EXISTS(SELECT 1 FROM information_schema.tables WHERE table_name=\'messages\')',
+  function(err, result) {
+    if (err) {
+      throw err;
+    } else {
+      if (!result.rows[0].exists) {
+        misc.initializeDataBase(databaseUrl);
+      }
+    }
+  }
+);
 
 server.listen(port, function() {
   console.log('aun-subscreen now listening on ' + port);
@@ -70,3 +84,10 @@ var socialStream = new SocialStream(process.env, pgClient);
 app.use(require('./routes/timeline')(process.env, io, pgClient, socialStream));
 
 app.use(express.static(__dirname + '/public'));
+
+var auth = express.basicAuth(
+  process.env.ADMIN_USERNAME || 'admin',
+  process.env.ADMIN_PASSWORD || 'admin'
+);
+app.use(auth)
+app.use(require('./routes/setup/database')(process.env, databaseUrl));
