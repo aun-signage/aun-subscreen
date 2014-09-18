@@ -4,6 +4,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var pg = require('pg');
+var _ = require('lodash');
 var misc = require('./lib/misc');
 
 var SocialStream = require('./lib/social-stream');
@@ -47,11 +48,14 @@ io.configure(function () {
   }
 });
 
+var connections = {};
 io.sockets.on('connection', function (socket) {
-  console.log('[' + socket.id + '] connected');
+  connections[socket.id] = true;
+  console.log('[' + socket.id + '] connected. current: ' + _.size(connections) + ' connection(s)');
 
   socket.on('disconnect', function() {
-    console.log('[' + socket.id + '] disconnected');
+    console.log('[' + socket.id + '] disconnected. current: ' + _.size(connections) + ' connection(s)');
+    delete connections[socket.id];
   });
 });
 
