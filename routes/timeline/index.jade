@@ -9,7 +9,7 @@ append head
           span.name(data-bind="text: payload.user.name")
           span.screen_name(data-bind="text: '@' + payload.user.screen_name()")
           .fa.fa-twitter.twitter-icon
-      .body(data-bind="text: payload.text")
+      .body(data-bind="text: _.unescape(payload.text())")
 
   script(type="text/html", id="irc")
     .irc
