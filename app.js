@@ -54,8 +54,8 @@ io.sockets.on('connection', function (socket) {
   console.log('[' + socket.id + '] connected. current: ' + _.size(connections) + ' connection(s)');
 
   socket.on('disconnect', function() {
-    console.log('[' + socket.id + '] disconnected. current: ' + _.size(connections) + ' connection(s)');
     delete connections[socket.id];
+    console.log('[' + socket.id + '] disconnected. current: ' + _.size(connections) + ' connection(s)');
   });
 });
 
