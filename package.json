@@ -8,8 +8,8 @@
   "author": "Team aun",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "express": "",
-    "socket.io": "",
+    "express": "~3",
+    "socket.io": "~0.9",
     "ntwitter": "",
     "pg": "",
     "jade": "",
