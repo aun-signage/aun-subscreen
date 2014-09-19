@@ -59,18 +59,14 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-app.configure(function() {
-  app.enable('trust proxy');
-  app.use(express.compress());
-});
+app.enable('trust proxy');
+app.use(express.compress());
 
-app.configure('development', function() {
-  app.use(express.logger('dev'));
-});
-
-app.configure('production', function() {
+if (process.env.NODE_ENV == 'production') {
   app.use(express.logger());
-});
+} else {
+  app.use(express.logger('dev'));
+}
 
 var herokuUrl = process.env.HEROKU_URL;
 if (herokuUrl) {
