@@ -38,6 +38,7 @@ func Ensure(db *sql.DB, maxMessages int) error {
 		`DROP EXTENSION IF EXISTS pg_trgm;`,
 		`CREATE EXTENSION pg_trgm;`,
 		`CREATE INDEX messages_text ON messages USING gin (text gin_trgm_ops) WHERE type = 'tweet';`,
+		`CREATE OR REPLACE RULE messages_insert AS ON INSERT TO messages DO ALSO NOTIFY messages_insert;`,
 	}
 
 	if maxMessages > 0 {
