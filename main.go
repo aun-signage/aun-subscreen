@@ -35,6 +35,7 @@ func main() {
 		log.Fatal("You must specity mqtt-url")
 	}
 
+	// database
 	if flagDatabaseUrl == "" {
 		log.Fatal("You must specity database-url")
 	}
@@ -48,6 +49,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// keepalive
 	if flagPingUrl == "" {
 		log.Println("Keepalive: not configured")
 	} else {
@@ -55,16 +57,18 @@ func main() {
 		go pinger.Ping(flagPingUrl)
 	}
 
-	addr := fmt.Sprintf(":%d", flagPort)
-
-	http.Handle("/", http.FileServer(http.Dir("public")))
-
+	// importer
 	go func() {
 		err := importer.Import(flagMqttUrl, db)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}()
+
+	// httpd
+	addr := fmt.Sprintf(":%d", flagPort)
+
+	http.Handle("/", http.FileServer(http.Dir("public")))
 
 	log.Println("Listening", addr)
 	if err := http.ListenAndServe(addr, nil); err != nil {
