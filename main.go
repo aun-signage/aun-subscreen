@@ -11,6 +11,7 @@ import (
 
 	"github.com/darashi/aun-subscreen-ng/ddl"
 	"github.com/darashi/aun-subscreen-ng/importer"
+	"github.com/darashi/aun-subscreen-ng/listener"
 	"github.com/darashi/aun-subscreen-ng/pinger"
 )
 
@@ -62,6 +63,24 @@ func main() {
 		err := importer.Import(flagMqttUrl, db)
 		if err != nil {
 			log.Fatal(err)
+		}
+	}()
+
+	// listener
+	ch := make(chan struct{})
+	err = listener.Listen(flagDatabaseUrl, "messages_insert", ch)
+	if err != nil {
+		log.Fatal(err)
+	}
+	go func() {
+		for _ = range ch {
+			var count int
+			err := db.QueryRow("SELECT COUNT(id) FROM messages;").Scan(&count)
+			if err != nil {
+				log.Fatal(err)
+			}
+			log.Printf("%d messages in DB", count)
+			// TODO notify to clients
 		}
 	}()
 
