@@ -67,8 +67,7 @@ func main() {
 	}()
 
 	// listener
-	ch := make(chan struct{})
-	err = listener.Listen(flagDatabaseUrl, "messages_insert", ch)
+	ch, err := listener.Listen(flagDatabaseUrl, "messages_insert")
 	if err != nil {
 		log.Fatal(err)
 	}

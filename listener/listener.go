@@ -7,7 +7,8 @@ import (
 	"github.com/lib/pq"
 )
 
-func Listen(databaseUrl string, name string, ch chan<- struct{}) error {
+func Listen(databaseUrl string, name string) (<-chan struct{}, error) {
+	ch := make(chan struct{})
 	reportProblem := func(ev pq.ListenerEventType, err error) {
 		if err != nil {
 			log.Println(err)
@@ -21,7 +22,7 @@ func Listen(databaseUrl string, name string, ch chan<- struct{}) error {
 	)
 	err := listener.Listen(name)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	go func() {
@@ -38,5 +39,5 @@ func Listen(databaseUrl string, name string, ch chan<- struct{}) error {
 		}
 	}()
 
-	return nil
+	return ch, nil
 }
