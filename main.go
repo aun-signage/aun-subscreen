@@ -107,6 +107,7 @@ func main() {
 
 func createSockjsHandler() func(sockjs.Session) {
 	return func(session sockjs.Session) {
+		log.Printf("[%s] connected", session.ID())
 		for {
 			msg, err := session.Recv()
 			if err != nil {
@@ -114,5 +115,6 @@ func createSockjsHandler() func(sockjs.Session) {
 			}
 			session.Send(msg)
 		}
+		log.Printf("[%s] disconnected", session.ID())
 	}
 }
