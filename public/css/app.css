@@ -29,7 +29,14 @@ body {
 }
 #messages .tweet .name {
   font-weight: bold;
-  padding-right: 12px;
+  margin-right: 12px;
+}
+#messages .tweet .screen-name {
+  margin-right: 12px;
+}
+#messages .tweet .twitter-icon {
+  text-decoration: none;
+  font-size: 42px;
 }
 #messages .tweet .text {
   color: #333;

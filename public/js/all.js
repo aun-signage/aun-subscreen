@@ -34,7 +34,8 @@ var Message = React.createClass({displayName: 'Message',
         React.DOM.div({className: "header"}, 
           React.DOM.img({className: "icon", src: this.props.data.payload.user.profile_image_url_https}), 
           React.DOM.span({className: "name"}, this.props.data.payload.user.name), 
-          React.DOM.span({className: "screen-name"}, "@", this.props.data.payload.user.screen_name)
+          React.DOM.span({className: "screen-name"}, "@", this.props.data.payload.user.screen_name), 
+          React.DOM.i({className: "fa fa-twitter twitter-icon"})
         ), 
         React.DOM.div({className: "text"}, this.props.data.text)
       )
