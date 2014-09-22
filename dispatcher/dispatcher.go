@@ -2,7 +2,6 @@ package dispatcher
 
 import (
 	"database/sql"
-	"log"
 	"sync"
 
 	"github.com/darashi/aun-subscreen-ng/timeline"
@@ -28,7 +27,6 @@ func (d *Dispatcher) Dispatch() error {
 	}
 
 	for ch, _ := range d.Channels {
-		log.Println("SENDING", ch)
 		ch <- buf
 		// TODO disconnect channel when buffer full
 	}
@@ -42,7 +40,6 @@ func (d *Dispatcher) DispatchOne(ch chan []byte) error {
 		return err
 	}
 
-	log.Println("SENDING(ONE)", ch)
 	ch <- buf
 	// TODO disconnect channel when buffer full
 

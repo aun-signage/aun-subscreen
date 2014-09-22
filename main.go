@@ -82,6 +82,7 @@ func main() {
 			if err := d.Dispatch(); err != nil {
 				log.Println(err)
 			}
+			log.Println("Dispatched")
 		}
 	}()
 
@@ -113,7 +114,6 @@ func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 
 		go func() {
 			for buf := range ch {
-				log.Println(string(buf))
 				session.Send(string(buf))
 			}
 			// TODO handle; channel closed by dispatcher
