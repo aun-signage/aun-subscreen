@@ -30,22 +30,22 @@ var stream = function(callback) {
   setInterval(connect, 2000);
 };
 
-var Message = React.createClass({displayName: 'Message',
+var Message = React.createClass({
   render: function() {
     return (
-      React.DOM.div({className: "message"}, 
-        React.DOM.img({src: this.props.data.payload.user.profile_image_url_https}), 
-        React.DOM.div({className: "header"}, 
-          React.DOM.strong(null, this.props.data.payload.user.name), 
-          React.DOM.span(null, "@", this.props.data.payload.user.screen_name)
-        ), 
-        React.DOM.div(null, this.props.data.text)
-      )
+      <div className="message">
+        <img src={this.props.data.payload.user.profile_image_url_https}></img>
+        <div className="header">
+          <strong>{this.props.data.payload.user.name}</strong>
+          <span>@{this.props.data.payload.user.screen_name}</span>
+        </div>
+        <div>{this.props.data.text}</div>
+      </div>
     );
   }
 });
 
-var Messages = React.createClass({displayName: 'Messages',
+var Messages = React.createClass({
   getInitialState: function() {
     return {data: []};
   },
@@ -58,17 +58,17 @@ var Messages = React.createClass({displayName: 'Messages',
   render: function() {
     var messageNodes = this.state.data.map(function (message) {
       return (
-        Message({data: message, key: message.id})
+        <Message data={message} key={message.id}/>
       );
     });
 
     return (
-      React.DOM.div(null, messageNodes)
+      <div>{messageNodes}</div>
     );
   }
 });
 
 React.renderComponent(
-  Messages({data: messages}),
+  <Messages data={messages}/>,
   document.getElementById('messages')
 );
