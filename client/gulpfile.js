@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var react = require('gulp-react');
+var less = require('gulp-less');
 
 var paths = {
   scripts: [
@@ -12,7 +13,7 @@ var paths = {
     "bower_components/sockjs/sockjs.min.js"
   ],
   stylesheets: [
-    "css/app.css"
+    "css/app.less"
   ],
   vendorStylesheets: [
     "bower_components/twitter/dist/css/bootstrap.min.css"
@@ -34,6 +35,7 @@ gulp.task('vendor-scripts', function() {
 
 gulp.task('stylesheets', function() {
   return gulp.src(paths.stylesheets)
+    .pipe(less())
     .pipe(concat('app.css'))
     .pipe(gulp.dest('../public/css'));
 });
