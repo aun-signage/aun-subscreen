@@ -11,6 +11,9 @@ var paths = {
     "bower_components/react/react.js",
     "bower_components/sockjs/sockjs.min.js"
   ],
+  stylesheets: [
+    "css/app.css"
+  ],
   vendorStylesheets: [
     "bower_components/twitter/dist/css/bootstrap.min.css"
   ]
@@ -29,6 +32,12 @@ gulp.task('vendor-scripts', function() {
     .pipe(gulp.dest('../public/js'));
 });
 
+gulp.task('stylesheets', function() {
+  return gulp.src(paths.stylesheets)
+    .pipe(concat('app.css'))
+    .pipe(gulp.dest('../public/css'));
+});
+
 gulp.task('vendor-stylesheets', function() {
   return gulp.src(paths.vendorStylesheets)
     .pipe(concat('vendor.css'))
@@ -38,9 +47,10 @@ gulp.task('vendor-stylesheets', function() {
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['scripts']);
   gulp.watch(paths.vendorScripts, ['vendor-scripts']);
+  gulp.watch(paths.stylesheets, ['stylesheets']);
   gulp.watch(paths.vendorStylesheets, ['vendor-stylesheets']);
 });
 
-gulp.task('build', ['scripts', 'vendor-scripts', 'vendor-stylesheets']);
+gulp.task('build', ['scripts', 'vendor-scripts', 'stylesheets', 'vendor-stylesheets']);
 
 gulp.task('default', ['watch']);
