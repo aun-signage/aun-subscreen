@@ -10,6 +10,7 @@
   ],
   "dependencies": {
     "sockjs": "~0.3",
-    "react": "~0.11.2"
+    "react": "~0.11.2",
+    "twitter": "~3.2.0"
   }
 }
