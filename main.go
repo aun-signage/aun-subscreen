@@ -12,10 +12,10 @@ import (
 	"gopkg.in/igm/sockjs-go.v2/sockjs"
 
 	"github.com/darashi/aun-subscreen-ng/ddl"
+	"github.com/darashi/aun-subscreen-ng/dispatcher"
 	"github.com/darashi/aun-subscreen-ng/importer"
 	"github.com/darashi/aun-subscreen-ng/listener"
 	"github.com/darashi/aun-subscreen-ng/pinger"
-	"github.com/darashi/aun-subscreen-ng/timeline"
 )
 
 var flagPort int
@@ -69,6 +69,9 @@ func main() {
 		}
 	}()
 
+	// dispatcher
+	d := dispatcher.NewDispatcher(db)
+
 	// listener
 	ch, err := listener.Listen(flagDatabaseUrl, "messages_insert")
 	if err != nil {
@@ -76,17 +79,14 @@ func main() {
 	}
 	go func() {
 		for _ = range ch {
-			buf, err := timeline.Timeline(db)
-			if err != nil {
-				log.Fatal(err)
+			if err := d.Dispatch(); err != nil {
+				log.Println(err)
 			}
-			log.Println(string(buf))
-			// TODO send to clients
 		}
 	}()
 
 	// Sock.JS handler
-	timelineHandler := createSockjsHandler()
+	timelineHandler := createSockjsHandler(d)
 	sockjsHandler := sockjs.NewHandler(
 		"/timeline",
 		sockjs.DefaultOptions,
@@ -105,9 +105,20 @@ func main() {
 	}
 }
 
-func createSockjsHandler() func(sockjs.Session) {
+func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 	return func(session sockjs.Session) {
 		log.Printf("[%s] connected", session.ID())
+		ch := d.Subscribe()
+		defer d.Unsubscribe(ch)
+
+		go func() {
+			for buf := range ch {
+				log.Println(string(buf))
+				session.Send(string(buf))
+			}
+			// TODO handle; channel closed by dispatcher
+		}()
+
 		for {
 			msg, err := session.Recv()
 			if err != nil {
