@@ -111,6 +111,7 @@ func createSockjsHandler() func(sockjs.Session) {
 		for {
 			msg, err := session.Recv()
 			if err != nil {
+				log.Printf("[%s] %v", session.ID(), err)
 				break
 			}
 			session.Send(msg)
