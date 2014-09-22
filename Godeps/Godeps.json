@@ -1,6 +1,9 @@
 {
 	"ImportPath": "github.com/darashi/aun-subscreen-ng",
 	"GoVersion": "go1.3.1",
+	"Packages": [
+		"."
+	],
 	"Deps": [
 		{
 			"ImportPath": "code.google.com/p/go.net/websocket",
@@ -12,8 +15,16 @@
 			"Rev": "0d6c6e73b249ca8d48fde878b4d1cfbb4cd45a5e"
 		},
 		{
+			"ImportPath": "github.com/gorilla/websocket",
+			"Rev": "a6f041ac33b84488bb44137d6866cd3c8706d792"
+		},
+		{
 			"ImportPath": "github.com/lib/pq",
 			"Rev": "fbed41b4c063a307ab21bf37ae6705519fb34ca3"
+		},
+		{
+			"ImportPath": "gopkg.in/igm/sockjs-go.v2/sockjs",
+			"Rev": "9dbc79efa97d9a6c6b4a515893bd02c9242e9225"
 		}
 	]
 }

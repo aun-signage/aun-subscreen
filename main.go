@@ -9,6 +9,8 @@ import (
 	"database/sql"
 	_ "github.com/lib/pq"
 
+	"gopkg.in/igm/sockjs-go.v2/sockjs"
+
 	"github.com/darashi/aun-subscreen-ng/ddl"
 	"github.com/darashi/aun-subscreen-ng/importer"
 	"github.com/darashi/aun-subscreen-ng/listener"
@@ -83,13 +85,34 @@ func main() {
 		}
 	}()
 
+	// Sock.JS handler
+	timelineHandler := createSockjsHandler()
+	sockjsHandler := sockjs.NewHandler(
+		"/timeline",
+		sockjs.DefaultOptions,
+		timelineHandler,
+	)
+
 	// httpd
 	addr := fmt.Sprintf(":%d", flagPort)
 
+	http.Handle("/timeline/", sockjsHandler)
 	http.Handle("/", http.FileServer(http.Dir("public")))
 
 	log.Println("Listening", addr)
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func createSockjsHandler() func(sockjs.Session) {
+	return func(session sockjs.Session) {
+		for {
+			msg, err := session.Recv()
+			if err != nil {
+				break
+			}
+			session.Send(msg)
+		}
 	}
 }
