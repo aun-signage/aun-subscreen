@@ -1,6 +1,41 @@
 body {
   background-color: #000;
-  color: #fff;
   margin: 0px;
   padding: 0px;
+  color: #fff;
+}
+#messages .tweet {
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #bbb;
+  background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#cccccc));
+  padding: 10px 0 10px 0;
+}
+#messages .tweet .header {
+  font-size: 36px;
+  background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#222222));
+  display: inline-block;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding-right: 12px;
+  color: #fff;
+  text-shadow: 0 -1px 0 #000000;
+  height: 48px;
+}
+#messages .tweet .icon {
+  float: left;
+  margin-right: 12px;
+  height: 48px;
+}
+#messages .tweet .name {
+  font-weight: bold;
+  padding-right: 12px;
+}
+#messages .tweet .text {
+  color: #333;
+  text-shadow: 0 1px 0 #ffffff;
+  font-weight: bold;
+  font-size: 42px;
+  line-height: 48px;
+  word-wrap: break-word;
+  margin: 5px 10px 5px 10px;
 }

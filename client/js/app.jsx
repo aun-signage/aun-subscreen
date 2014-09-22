@@ -3,13 +3,13 @@
 var Message = React.createClass({
   render: function() {
     return (
-      <div className="message">
-        <img src={this.props.data.payload.user.profile_image_url_https}></img>
+      <div className="message tweet">
         <div className="header">
-          <strong>{this.props.data.payload.user.name}</strong>
-          <span>@{this.props.data.payload.user.screen_name}</span>
+          <img className="icon" src={this.props.data.payload.user.profile_image_url_https}></img>
+          <span className="name">{this.props.data.payload.user.name}</span>
+          <span className="screen_name">@{this.props.data.payload.user.screen_name}</span>
         </div>
-        <div>{this.props.data.text}</div>
+        <div className="text">{this.props.data.text}</div>
       </div>
     );
   }

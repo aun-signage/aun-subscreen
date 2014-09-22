@@ -30,13 +30,13 @@ var stream = function(callback) {
 var Message = React.createClass({displayName: 'Message',
   render: function() {
     return (
-      React.DOM.div({className: "message"}, 
-        React.DOM.img({src: this.props.data.payload.user.profile_image_url_https}), 
+      React.DOM.div({className: "message tweet"}, 
         React.DOM.div({className: "header"}, 
-          React.DOM.strong(null, this.props.data.payload.user.name), 
-          React.DOM.span(null, "@", this.props.data.payload.user.screen_name)
+          React.DOM.img({className: "icon", src: this.props.data.payload.user.profile_image_url_https}), 
+          React.DOM.span({className: "name"}, this.props.data.payload.user.name), 
+          React.DOM.span({className: "screen_name"}, "@", this.props.data.payload.user.screen_name)
         ), 
-        React.DOM.div(null, this.props.data.text)
+        React.DOM.div({className: "text"}, this.props.data.text)
       )
     );
   }

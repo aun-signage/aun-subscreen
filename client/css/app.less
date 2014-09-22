@@ -1,6 +1,55 @@
 body {
   background-color: #000;
-  color: #fff;
   margin: 0px;
   padding: 0px;
+  color: #fff;
+}
+
+@fontSizeHeader: 36px;
+@fontSizeNormal: 42px;
+@lineHeight: 48px;
+@iconHeight: 48px;
+
+#messages {
+  .tweet {
+    border-top: 2px solid #fff;
+    border-bottom: 2px solid #bbb;
+    background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
+    padding: 10px 0 10px 0;
+
+    .header {
+      font-size: @fontSizeHeader;
+      background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#222));
+      display: inline-block;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      padding-right: 12px;
+
+      color: #fff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 1);
+
+      height: @iconHeight;
+    }
+
+    .icon {
+      float: left;
+      margin-right: 12px;
+      height: @iconHeight;
+    }
+
+    .name {
+      font-weight: bold;
+      padding-right: 12px;
+    }
+
+    .text {
+       color: #333;
+       text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+       font-weight: bold;
+       font-size: @fontSizeNormal;
+       line-height: @lineHeight;
+       word-wrap: break-word;
+       margin: 5px 10px 5px 10px;
+    }
+  }
 }
