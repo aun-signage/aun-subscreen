@@ -36,6 +36,19 @@ func (d *Dispatcher) Dispatch() error {
 	return nil
 }
 
+func (d *Dispatcher) DispatchOne(ch chan []byte) error {
+	buf, err := timeline.Timeline(d.DB)
+	if err != nil {
+		return err
+	}
+
+	log.Println("SENDING(ONE)", ch)
+	ch <- buf
+	// TODO disconnect channel when buffer full
+
+	return nil
+}
+
 func (d *Dispatcher) Subscribe() chan []byte {
 	ch := make(chan []byte)
 

@@ -119,6 +119,8 @@ func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 			// TODO handle; channel closed by dispatcher
 		}()
 
+		d.DispatchOne(ch)
+
 		for {
 			msg, err := session.Recv()
 			if err != nil {
