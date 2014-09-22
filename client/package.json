@@ -1,0 +1,12 @@
+{
+  "name": "aun-subscreen-ng",
+  "version": "0.0.0",
+  "description": "",
+  "private": "true",
+  "dependencies": {
+    "bower": "*",
+    "gulp": "*",
+    "gulp-concat": "*",
+    "gulp-react": "*"
+  }
+}
