@@ -11,6 +11,7 @@
   "dependencies": {
     "sockjs": "~0.3",
     "react": "~0.11.2",
-    "twitter": "~3.2.0"
+    "twitter": "~3.2.0",
+    "fontawesome": "~4.2.0"
   }
 }

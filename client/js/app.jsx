@@ -7,7 +7,7 @@ var Message = React.createClass({
         <div className="header">
           <img className="icon" src={this.props.data.payload.user.profile_image_url_https}></img>
           <span className="name">{this.props.data.payload.user.name}</span>
-          <span className="screen_name">@{this.props.data.payload.user.screen_name}</span>
+          <span className="screen-name">@{this.props.data.payload.user.screen_name}</span>
         </div>
         <div className="text">{this.props.data.text}</div>
       </div>
