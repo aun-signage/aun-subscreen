@@ -3,7 +3,6 @@ package timeline
 import (
 	"database/sql"
 	"encoding/json"
-	"log"
 	"time"
 )
 
@@ -29,7 +28,7 @@ func Timeline(db *sql.DB, query string) ([]byte, error) {
 	}
 	rows, err := db.Query(sql)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer rows.Close()
 	messages := make([]Message, 0)
