@@ -8,7 +8,7 @@ import (
 	"github.com/darashi/aun-subscreen-ng/timeline"
 )
 
-// TODO treat multiple streams
+// TODO normalize queries to be more efficient
 
 type Dispatcher struct {
 	DB              *sql.DB
@@ -33,6 +33,7 @@ func (d *Dispatcher) Dispatch() error {
 		if err != nil {
 			return err
 		}
+		// TODO do not resend if not updated to save bandwidth
 
 		for ch, _ := range channels {
 			ch <- buf

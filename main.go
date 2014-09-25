@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -106,6 +107,10 @@ func main() {
 	}
 }
 
+type Params struct {
+	Query string `json:"query"`
+}
+
 func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 	return func(session sockjs.Session) {
 		log.Printf("[%s] connected", session.ID())
@@ -127,9 +132,15 @@ func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 				break
 			}
 			log.Printf("[%s] received %v", session.ID(), msg)
+			var params Params
+			err = json.Unmarshal([]byte(msg), &params)
+			if err != nil {
+				log.Printf("[%s] %v", session.ID(), err)
+				break
+			}
 			d.Unsubscribe(ch)
-			d.Subscribe(ch, msg)
-			d.DispatchOne(ch, msg)
+			d.Subscribe(ch, params.Query)
+			d.DispatchOne(ch, params.Query)
 		}
 		log.Printf("[%s] disconnected", session.ID())
 	}
