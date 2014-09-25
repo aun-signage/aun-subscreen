@@ -111,7 +111,6 @@ func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 		log.Printf("[%s] connected", session.ID())
 		ch := make(chan []byte)
 
-		d.Subscribe(ch)
 		defer d.Unsubscribe(ch)
 
 		go func() {
@@ -121,8 +120,6 @@ func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 			// TODO handle; channel closed by dispatcher
 		}()
 
-		d.DispatchOne(ch)
-
 		for {
 			msg, err := session.Recv()
 			if err != nil {
@@ -130,7 +127,9 @@ func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 				break
 			}
 			log.Printf("[%s] received %v", session.ID(), msg)
-			// TODO configure channel
+			d.Unsubscribe(ch)
+			d.Subscribe(ch, msg)
+			d.DispatchOne(ch, msg)
 		}
 		log.Printf("[%s] disconnected", session.ID())
 	}

@@ -2,6 +2,7 @@ package dispatcher
 
 import (
 	"database/sql"
+	"log"
 	"sync"
 
 	"github.com/darashi/aun-subscreen-ng/timeline"
@@ -10,14 +11,20 @@ import (
 // TODO treat multiple streams
 
 type Dispatcher struct {
-	DB            *sql.DB
-	Channels      map[chan []byte]struct{}
-	ChannelsMutex sync.Mutex
+	DB              *sql.DB
+	Subscriptions   map[string]map[chan []byte]struct{}
+	QueryForChannel map[chan []byte]string
+	ChannelsMutex   sync.Mutex
 }
 
 func NewDispatcher(db *sql.DB) *Dispatcher {
-	channels := make(map[chan []byte]struct{})
-	return &Dispatcher{DB: db, Channels: channels}
+	subscriptions := make(map[string]map[chan []byte]struct{})
+	queries := make(map[chan []byte]string)
+	return &Dispatcher{
+		DB:              db,
+		Subscriptions:   subscriptions,
+		QueryForChannel: queries,
+	}
 }
 
 func (d *Dispatcher) Dispatch() error {
@@ -26,15 +33,19 @@ func (d *Dispatcher) Dispatch() error {
 		return err
 	}
 
-	for ch, _ := range d.Channels {
-		ch <- buf
-		// TODO disconnect channel when buffer full
+	for _, channels := range d.Subscriptions {
+		// TODO get buf for _ (=query)
+		for ch, _ := range channels {
+			ch <- buf
+			// TODO disconnect channel when buffer full
+		}
 	}
 
 	return nil
 }
 
-func (d *Dispatcher) DispatchOne(ch chan []byte) error {
+func (d *Dispatcher) DispatchOne(ch chan []byte, query string) error {
+	// TODO get buf for query
 	buf, err := timeline.Timeline(d.DB)
 	if err != nil {
 		return err
@@ -46,14 +57,39 @@ func (d *Dispatcher) DispatchOne(ch chan []byte) error {
 	return nil
 }
 
-func (d *Dispatcher) Subscribe(ch chan []byte) {
+func (d *Dispatcher) Subscribe(ch chan []byte, query string) {
 	d.ChannelsMutex.Lock()
 	defer d.ChannelsMutex.Unlock()
-	d.Channels[ch] = struct{}{}
+
+	if subscription, ok := d.Subscriptions[query]; ok {
+		subscription[ch] = struct{}{}
+	} else {
+		d.Subscriptions[query] = make(map[chan []byte]struct{})
+		d.Subscriptions[query][ch] = struct{}{}
+	}
+	d.QueryForChannel[ch] = query
+
+	log.Printf("SUBSCRIBE: Channels: %d, Connections: %d", len(d.Subscriptions), len(d.QueryForChannel))
 }
 
 func (d *Dispatcher) Unsubscribe(ch chan []byte) {
 	d.ChannelsMutex.Lock()
 	defer d.ChannelsMutex.Unlock()
-	delete(d.Channels, ch)
+
+	query, ok := d.QueryForChannel[ch]
+	if !ok {
+		return
+	}
+
+	subscription, ok := d.Subscriptions[query]
+	if !ok {
+		return
+	}
+	delete(d.QueryForChannel, ch)
+	delete(subscription, ch)
+	if len(subscription) == 0 {
+		delete(d.Subscriptions, query)
+	}
+
+	log.Printf("UNSUBSCRIBE: Channels: %d, Connections: %d", len(d.Subscriptions), len(d.QueryForChannel))
 }
