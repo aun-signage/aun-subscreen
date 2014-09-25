@@ -46,14 +46,10 @@ func (d *Dispatcher) DispatchOne(ch chan []byte) error {
 	return nil
 }
 
-func (d *Dispatcher) Subscribe() chan []byte {
-	ch := make(chan []byte)
-
+func (d *Dispatcher) Subscribe(ch chan []byte) {
 	d.ChannelsMutex.Lock()
 	defer d.ChannelsMutex.Unlock()
 	d.Channels[ch] = struct{}{}
-
-	return ch
 }
 
 func (d *Dispatcher) Unsubscribe(ch chan []byte) {

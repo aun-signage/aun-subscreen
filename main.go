@@ -109,7 +109,9 @@ func main() {
 func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 	return func(session sockjs.Session) {
 		log.Printf("[%s] connected", session.ID())
-		ch := d.Subscribe()
+		ch := make(chan []byte)
+
+		d.Subscribe(ch)
 		defer d.Unsubscribe(ch)
 
 		go func() {
