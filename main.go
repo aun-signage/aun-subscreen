@@ -127,7 +127,8 @@ func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 				log.Printf("[%s] %v", session.ID(), err)
 				break
 			}
-			session.Send(msg)
+			log.Printf("[%s] received %v", session.ID(), msg)
+			// TODO configure channel
 		}
 		log.Printf("[%s] disconnected", session.ID())
 	}

@@ -1,5 +1,5 @@
 var sock = null;
-var stream = function(callback) {
+var stream = function(query, callback) {
   var connect = function() {
     if (sock) {
       return;
@@ -8,7 +8,10 @@ var stream = function(callback) {
     sock = new SockJS('/timeline');
 
     sock.onopen = function() {
-      // connected
+      var json = JSON.stringify({
+        query: query
+      });
+      sock.send(json);
     };
 
     sock.onmessage = function(e) {

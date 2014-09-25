@@ -22,7 +22,8 @@ var Messages = React.createClass({
   },
   componentDidMount: function() {
     var self = this;
-    stream(function(data) {
+    var query = location.search.replace(/^\?/, '')
+    stream(query, function(data) {
       self.setState({data: data});
     });
   },
