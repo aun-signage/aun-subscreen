@@ -30,7 +30,7 @@ var stream = function(query, callback) {
 
 /** @jsx React.DOM */
 
-var Message = React.createClass({displayName: 'Message',
+var Tweet = React.createClass({displayName: 'Tweet',
   render: function() {
     return (
       React.DOM.div({className: "message tweet"}, 
@@ -39,6 +39,19 @@ var Message = React.createClass({displayName: 'Message',
           React.DOM.span({className: "name"}, this.props.data.payload.user.name), 
           React.DOM.span({className: "screen-name"}, "@", this.props.data.payload.user.screen_name), 
           React.DOM.i({className: "fa fa-twitter twitter-icon"})
+        ), 
+        React.DOM.div({className: "text"}, _.unescape(this.props.data.text))
+      )
+    );
+  }
+});
+
+var IrcMessage = React.createClass({displayName: 'IrcMessage',
+  render: function() {
+    return (
+      React.DOM.div({className: "message irc"}, 
+        React.DOM.div({className: "header"}, 
+          React.DOM.span({className: "name"}, this.props.data.payload.from)
         ), 
         React.DOM.div({className: "text"}, _.unescape(this.props.data.text))
       )
@@ -59,9 +72,16 @@ var Messages = React.createClass({displayName: 'Messages',
   },
   render: function() {
     var messageNodes = this.state.data.map(function (message) {
-      return (
-        Message({data: message, key: message.id})
-      );
+      switch (message.type) {
+        case "tweet":
+          return (
+            Tweet({data: message, key: message.id})
+          );
+        case "irc":
+          return (
+            IrcMessage({data: message, key: message.id})
+          );
+      }
     });
 
     return (

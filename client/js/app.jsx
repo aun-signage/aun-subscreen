@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var Message = React.createClass({
+var Tweet = React.createClass({
   render: function() {
     return (
       <div className="message tweet">
@@ -9,6 +9,19 @@ var Message = React.createClass({
           <span className="name">{this.props.data.payload.user.name}</span>
           <span className="screen-name">@{this.props.data.payload.user.screen_name}</span>
           <i className="fa fa-twitter twitter-icon"></i>
+        </div>
+        <div className="text">{_.unescape(this.props.data.text)}</div>
+      </div>
+    );
+  }
+});
+
+var IrcMessage = React.createClass({
+  render: function() {
+    return (
+      <div className="message irc">
+        <div className="header">
+          <span className="name">{this.props.data.payload.from}</span>
         </div>
         <div className="text">{_.unescape(this.props.data.text)}</div>
       </div>
@@ -29,9 +42,16 @@ var Messages = React.createClass({
   },
   render: function() {
     var messageNodes = this.state.data.map(function (message) {
-      return (
-        <Message data={message} key={message.id}/>
-      );
+      switch (message.type) {
+        case "tweet":
+          return (
+            <Tweet data={message} key={message.id}/>
+          );
+        case "irc":
+          return (
+            <IrcMessage data={message} key={message.id}/>
+          );
+      }
     });
 
     return (

@@ -15,27 +15,61 @@ body {
   width: 100%;
   .message {
     width: 100%;
+
+    padding: 10px 0 10px 0;
+
+    .header {
+      font-size: @fontSizeHeader;
+      height: @iconHeight;
+      white-space: nowrap;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      display: inline-block;
+      padding-right: 12px;
+    }
+
+    .text {
+      font-size: @fontSizeNormal;
+      font-weight: bold;
+      line-height: @lineHeight;
+      word-wrap: break-word;
+      margin: 5px 10px 5px 10px;
+    }
+  }
+
+  .irc {
+    border-top: 2px solid #444;
+    border-bottom: 2px solid #000;
+    background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#222));
+    color: #fff;
+
+    .header {
+      padding-left: 10px;
+
+      background: -webkit-gradient(linear, left top, left bottom, from(#999), to(#ccc));
+
+      color: #000;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+
+      .name {
+        font-weight: bold;
+      }
+    }
+    .text {
+      display: inline;
+    }
   }
 
   .tweet {
     border-top: 2px solid #fff;
     border-bottom: 2px solid #bbb;
     background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
-    padding: 10px 0 10px 0;
 
     .header {
-      font-size: @fontSizeHeader;
       background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#222));
-      display: inline-block;
-      border-top-right-radius: 5px;
-      border-bottom-right-radius: 5px;
-      padding-right: 12px;
 
       color: #fff;
       text-shadow: 0 -1px 0 rgba(0, 0, 0, 1);
-
-      height: @iconHeight;
-      white-space: nowrap;
     }
 
     .icon {
@@ -62,11 +96,6 @@ body {
     .text {
        color: #333;
        text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
-       font-weight: bold;
-       font-size: @fontSizeNormal;
-       line-height: @lineHeight;
-       word-wrap: break-word;
-       margin: 5px 10px 5px 10px;
     }
   }
 }

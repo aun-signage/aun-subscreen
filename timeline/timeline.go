@@ -33,10 +33,28 @@ func buildSql(query string, limit int) (string, []interface{}, error) {
 		values = append(values, value)
 		return fmt.Sprintf("$%d", len(values))
 	}
+	inVals := func(values []string) string {
+		placeholders := make([]string, len(values))
+		for i, value := range values {
+			placeholders[i] = val(value)
+		}
+		return "IN (" + strings.Join(placeholders, ", ") + ")"
+	}
 
 	if tweet := params.Get("tweet"); tweet != "" {
 		orConds = append(orConds,
 			`(type = 'tweet' AND text ~* `+val(tweet)+`)`,
+		)
+	}
+
+	if irc := params.Get("irc"); irc != "" {
+		channels := strings.Split(irc, ",")
+		channelsWithHash := make([]string, len(channels))
+		for i, channel := range channels {
+			channelsWithHash[i] = "#" + channel
+		}
+		orConds = append(orConds,
+			`(type = 'irc' AND payload ->> 'to' `+inVals(channelsWithHash)+`)`,
 		)
 	}
 

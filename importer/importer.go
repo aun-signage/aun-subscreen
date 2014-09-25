@@ -123,6 +123,31 @@ func insertTweet(
 	)
 }
 
+type IrcMessage struct {
+	Text string `json:"text"`
+}
+
+func insertIrc(
+	db *sql.DB,
+	payload []byte,
+) error {
+	t := time.Now()
+
+	var ircMessage IrcMessage
+	err := json.Unmarshal(payload, &ircMessage)
+	if err != nil {
+		return err
+	}
+
+	return insertMessage(
+		db,
+		"irc",
+		t,
+		payload,
+		ircMessage.Text,
+	)
+}
+
 func Import(mqttUrl string, db *sql.DB) error {
 	client, err := mqttClient(mqttUrl)
 	if err != nil {
@@ -131,22 +156,38 @@ func Import(mqttUrl string, db *sql.DB) error {
 
 	log.Println("MQTT connected")
 
-	topicFilter, err := MQTT.NewTopicFilter("tweet", 0)
+	tweetTopicFilter, err := MQTT.NewTopicFilter("tweet", 0)
+	if err != nil {
+		return err
+	}
+	ircTopicFilter, err := MQTT.NewTopicFilter("irc", 0)
 	if err != nil {
 		return err
 	}
 
-	receipt, err := client.StartSubscription(
+	tweetSubscriptionReciept, err := client.StartSubscription(
 		func(client *MQTT.MqttClient, message MQTT.Message) {
 			err := insertTweet(db, message.Payload())
 			if err != nil {
 				log.Println(err)
 			}
-		}, topicFilter)
+		}, tweetTopicFilter)
 	if err != nil {
 		return err
 	}
-	<-receipt
+	<-tweetSubscriptionReciept
+
+	ircSubscriptionReciept, err := client.StartSubscription(
+		func(client *MQTT.MqttClient, message MQTT.Message) {
+			err := insertIrc(db, message.Payload())
+			if err != nil {
+				log.Println(err)
+			}
+		}, ircTopicFilter)
+	if err != nil {
+		return err
+	}
+	<-ircSubscriptionReciept
 
 	return nil
 }
