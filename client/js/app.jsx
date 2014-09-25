@@ -10,7 +10,7 @@ var Message = React.createClass({
           <span className="screen-name">@{this.props.data.payload.user.screen_name}</span>
           <i className="fa fa-twitter twitter-icon"></i>
         </div>
-        <div className="text">{this.props.data.text}</div>
+        <div className="text">{_.unescape(this.props.data.text)}</div>
       </div>
     );
   }

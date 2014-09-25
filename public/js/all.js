@@ -37,7 +37,7 @@ var Message = React.createClass({displayName: 'Message',
           React.DOM.span({className: "screen-name"}, "@", this.props.data.payload.user.screen_name), 
           React.DOM.i({className: "fa fa-twitter twitter-icon"})
         ), 
-        React.DOM.div({className: "text"}, this.props.data.text)
+        React.DOM.div({className: "text"}, _.unescape(this.props.data.text))
       )
     );
   }
