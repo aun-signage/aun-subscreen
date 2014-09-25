@@ -15,6 +15,7 @@ type Dispatcher struct {
 	ChannelsForQuery map[string]map[chan []byte]struct{}
 	QueryForChannel  map[chan []byte]string
 	ChannelsMutex    sync.Mutex
+	BufferLength     int
 }
 
 func NewDispatcher(db *sql.DB) *Dispatcher {
@@ -36,8 +37,13 @@ func (d *Dispatcher) Dispatch() error {
 		// TODO do not resend if not updated to save bandwidth
 
 		for ch, _ := range channels {
-			ch <- buf
-			// TODO disconnect channel when buffer full
+			select {
+			case ch <- buf:
+				// OK
+			default:
+				log.Println("CHANNEL STALLED")
+				// TODO disconnect channel
+			}
 		}
 	}
 
@@ -50,8 +56,13 @@ func (d *Dispatcher) DispatchOne(ch chan []byte, query string) error {
 		return err
 	}
 
-	ch <- buf
-	// TODO disconnect channel when buffer full
+	select {
+	case ch <- buf:
+		// OK
+	default:
+		log.Println("CHANNEL STALLED")
+		// TODO disconnect channel
+	}
 
 	return nil
 }
