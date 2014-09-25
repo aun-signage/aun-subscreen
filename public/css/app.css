@@ -4,6 +4,12 @@ body {
   padding: 0px;
   color: #fff;
 }
+#messages {
+  width: 100%;
+}
+#messages .message {
+  width: 100%;
+}
 #messages .tweet {
   border-top: 2px solid #fff;
   border-bottom: 2px solid #bbb;
