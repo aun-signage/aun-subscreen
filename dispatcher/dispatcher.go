@@ -28,13 +28,12 @@ func NewDispatcher(db *sql.DB) *Dispatcher {
 }
 
 func (d *Dispatcher) Dispatch() error {
-	buf, err := timeline.Timeline(d.DB)
-	if err != nil {
-		return err
-	}
+	for query, channels := range d.Subscriptions {
+		buf, err := timeline.Timeline(d.DB, query)
+		if err != nil {
+			return err
+		}
 
-	for _, channels := range d.Subscriptions {
-		// TODO get buf for _ (=query)
 		for ch, _ := range channels {
 			ch <- buf
 			// TODO disconnect channel when buffer full
@@ -45,8 +44,7 @@ func (d *Dispatcher) Dispatch() error {
 }
 
 func (d *Dispatcher) DispatchOne(ch chan []byte, query string) error {
-	// TODO get buf for query
-	buf, err := timeline.Timeline(d.DB)
+	buf, err := timeline.Timeline(d.DB, query)
 	if err != nil {
 		return err
 	}

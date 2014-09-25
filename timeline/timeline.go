@@ -15,9 +15,10 @@ type Message struct {
 	Text    string      `json:"text"`
 }
 
-func Timeline(db *sql.DB) ([]byte, error) {
-	query := `SELECT id, type, time, payload, text FROM messages ORDER BY time DESC LIMIT 20;`
-	rows, err := db.Query(query)
+func Timeline(db *sql.DB, query string) ([]byte, error) {
+	// TODO generate sql from query
+	sql := `SELECT id, type, time, payload, text FROM messages ORDER BY time DESC LIMIT 20;`
+	rows, err := db.Query(sql)
 	if err != nil {
 		log.Fatal(err)
 	}
