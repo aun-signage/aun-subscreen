@@ -3,6 +3,7 @@ package timeline
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -14,15 +15,17 @@ type Message struct {
 	Text    string      `json:"text"`
 }
 
-func buildSql(query string) (string, error) {
+func buildSql(query string, limit int) (string, error) {
 	// TODO generate sql from query
-	sql := `SELECT id, type, time, payload, text FROM messages ORDER BY time DESC LIMIT 20;`
+	sql := `SELECT id, type, time, payload, text FROM messages`
+	sql += ` ORDER BY time DESC`
+	sql += fmt.Sprintf(`LIMIT %d;`, limit)
 
 	return sql, nil
 }
 
 func Timeline(db *sql.DB, query string) ([]byte, error) {
-	sql, err := buildSql(query)
+	sql, err := buildSql(query, 20)
 	if err != nil {
 		return nil, err
 	}
