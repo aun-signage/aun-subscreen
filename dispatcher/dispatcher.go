@@ -11,26 +11,31 @@ import (
 // TODO normalize queries to be more efficient
 
 type Dispatcher struct {
-	DB               *sql.DB
-	ChannelsForQuery map[string]map[chan []byte]struct{}
-	QueryForChannel  map[chan []byte]string
-	ChannelsMutex    sync.Mutex
-	BufferLength     int
+	DB                 *sql.DB
+	ChannelsForQuery   map[string]map[chan []byte]struct{}
+	QueryForChannel    map[chan []byte]string
+	ChannelsMutex      sync.Mutex
+	BufferLength       int
+	GlobalQueryOptions map[string]string
 }
 
-func NewDispatcher(db *sql.DB) *Dispatcher {
+func NewDispatcher(
+	db *sql.DB,
+	globalQueryOptions map[string]string,
+) *Dispatcher {
 	subscriptions := make(map[string]map[chan []byte]struct{})
 	queries := make(map[chan []byte]string)
 	return &Dispatcher{
-		DB:               db,
-		ChannelsForQuery: subscriptions,
-		QueryForChannel:  queries,
+		DB:                 db,
+		ChannelsForQuery:   subscriptions,
+		QueryForChannel:    queries,
+		GlobalQueryOptions: globalQueryOptions,
 	}
 }
 
 func (d *Dispatcher) Dispatch() error {
 	for query, channels := range d.ChannelsForQuery {
-		buf, err := timeline.Timeline(d.DB, query)
+		buf, err := timeline.Timeline(d.DB, query, d.GlobalQueryOptions)
 		if err != nil {
 			return err
 		}
@@ -51,7 +56,7 @@ func (d *Dispatcher) Dispatch() error {
 }
 
 func (d *Dispatcher) DispatchOne(ch chan []byte, query string) error {
-	buf, err := timeline.Timeline(d.DB, query)
+	buf, err := timeline.Timeline(d.DB, query, d.GlobalQueryOptions)
 	if err != nil {
 		return err
 	}

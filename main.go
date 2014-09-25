@@ -24,6 +24,8 @@ var flagMqttUrl string
 var flagDatabaseUrl string
 var flagMaxMessages int
 var flagPingUrl string
+var flagTwitterExcludeRegexp string
+var flagTwitterExcludeScreenName string
 
 func init() {
 	flag.IntVar(&flagPort, "port", 8080, "port to listen")
@@ -31,6 +33,8 @@ func init() {
 	flag.StringVar(&flagMqttUrl, "mqtt-url", "", "url to mqtt server")
 	flag.StringVar(&flagDatabaseUrl, "database-url", "", "url to PostgreSQL")
 	flag.StringVar(&flagPingUrl, "ping-url", "", "url to ping periodically")
+	flag.StringVar(&flagTwitterExcludeRegexp, "twitter-exclude-regexp", "", "regexp to exlude from tweet stream")
+	flag.StringVar(&flagTwitterExcludeScreenName, "twitter-exclude-screen-name", "", "screen names to exlude from tweet stream")
 }
 
 func main() {
@@ -71,7 +75,10 @@ func main() {
 	}()
 
 	// dispatcher
-	d := dispatcher.NewDispatcher(db)
+	opts := make(map[string]string)
+	opts["twitter-exclude-regexp"] = flagTwitterExcludeRegexp
+	opts["twitter-exclude-screen-name"] = flagTwitterExcludeScreenName
+	d := dispatcher.NewDispatcher(db, opts)
 
 	// listener
 	ch, err := listener.Listen(flagDatabaseUrl, "messages_insert")
@@ -140,7 +147,10 @@ func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 			}
 			d.Unsubscribe(ch)
 			d.Subscribe(ch, params.Query)
-			d.DispatchOne(ch, params.Query)
+			err = d.DispatchOne(ch, params.Query)
+			if err != nil {
+				log.Println(err)
+			}
 		}
 		log.Printf("[%s] disconnected", session.ID())
 	}

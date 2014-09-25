@@ -18,7 +18,11 @@ type Message struct {
 	Text    string      `json:"text"`
 }
 
-func buildSql(query string, limit int) (string, []interface{}, error) {
+func buildSql(
+	query string,
+	limit int,
+	globalQueryOptions map[string]string,
+) (string, []interface{}, error) {
 	sql := `SELECT id, type, time, payload, text FROM messages`
 
 	params, err := url.ParseQuery(query)
@@ -63,6 +67,22 @@ func buildSql(query string, limit int) (string, []interface{}, error) {
 		conds = append(conds, orCondsStr)
 	}
 
+	log.Println(globalQueryOptions)
+	if twitterExcludeRegexp, ok := globalQueryOptions["twitter-exclude-regexp"]; ok && twitterExcludeRegexp != "" {
+		conds = append(
+			conds,
+			`(NOT (type = 'tweet' AND text ~* `+val(twitterExcludeRegexp)+`))`,
+		)
+	}
+
+	if twitterExcludeScreenName, ok := globalQueryOptions["twitter-exclude-screen-name"]; ok && twitterExcludeScreenName != "" {
+		screenNames := strings.Split(twitterExcludeScreenName, ",")
+		conds = append(
+			conds,
+			`(NOT (type = 'tweet' AND (payload -> 'user' ->> 'screen_name') `+inVals(screenNames)+`))`,
+		)
+	}
+
 	if len(conds) > 0 {
 		sql += " WHERE " + strings.Join(conds, " AND ")
 	}
@@ -74,8 +94,16 @@ func buildSql(query string, limit int) (string, []interface{}, error) {
 	return sql, values, nil
 }
 
-func Timeline(db *sql.DB, query string) ([]byte, error) {
-	sql, values, err := buildSql(query, 20)
+func Timeline(
+	db *sql.DB,
+	query string,
+	globalQueryOptions map[string]string,
+) ([]byte, error) {
+	sql, values, err := buildSql(
+		query,
+		20,
+		globalQueryOptions,
+	)
 	if err != nil {
 		return nil, err
 	}
