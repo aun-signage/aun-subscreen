@@ -11,6 +11,7 @@ var paths = {
   vendorScripts: [
     "bower_components/react/react.js",
     "bower_components/sockjs/sockjs.min.js",
+    "bower_components/lodash/dist/lodash.min.js"
   ],
   stylesheets: [
     "css/app.less"
