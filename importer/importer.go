@@ -124,6 +124,8 @@ func insertTweet(
 }
 
 type IrcMessage struct {
+	From string `json:"from"`
+	To   string `json:"to"`
 	Text string `json:"text"`
 }
 
@@ -138,6 +140,11 @@ func insertIrc(
 	if err != nil {
 		return err
 	}
+	log.Printf("IRC %s <%s> %s",
+		ircMessage.To,
+		ircMessage.From,
+		ircMessage.Text,
+	)
 
 	return insertMessage(
 		db,
