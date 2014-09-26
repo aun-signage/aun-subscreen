@@ -27,6 +27,8 @@ var flagPingUrl string
 var flagTwitterExcludeRegexp string
 var flagTwitterExcludeScreenName string
 
+const CHANNEL_MESSAGE_BUFFER_LENGTH = 10
+
 func init() {
 	flag.IntVar(&flagPort, "port", 8080, "port to listen")
 	flag.IntVar(&flagMaxMessages, "max-messages", 9500, "max number of messages to retain; set 0 to retain all messages")
@@ -121,7 +123,7 @@ type Params struct {
 func createSockjsHandler(d *dispatcher.Dispatcher) func(sockjs.Session) {
 	return func(session sockjs.Session) {
 		log.Printf("[%s] connected", session.ID())
-		ch := make(chan []byte)
+		ch := make(chan []byte, CHANNEL_MESSAGE_BUFFER_LENGTH)
 
 		defer d.Unsubscribe(ch)
 
