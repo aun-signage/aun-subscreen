@@ -67,7 +67,6 @@ func buildSql(
 		conds = append(conds, orCondsStr)
 	}
 
-	log.Println(globalQueryOptions)
 	if twitterExcludeRegexp, ok := globalQueryOptions["twitter-exclude-regexp"]; ok && twitterExcludeRegexp != "" {
 		conds = append(
 			conds,
