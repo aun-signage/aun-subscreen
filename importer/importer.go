@@ -163,11 +163,11 @@ func Import(mqttUrl string, db *sql.DB) error {
 
 	log.Println("MQTT connected")
 
-	tweetTopicFilter, err := MQTT.NewTopicFilter("tweet", 0)
+	tweetTopicFilter, err := MQTT.NewTopicFilter("scial-stream/tweet", 0)
 	if err != nil {
 		return err
 	}
-	ircTopicFilter, err := MQTT.NewTopicFilter("irc", 0)
+	ircTopicFilter, err := MQTT.NewTopicFilter("social-stream/irc", 0)
 	if err != nil {
 		return err
 	}
