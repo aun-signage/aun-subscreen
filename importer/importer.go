@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"regexp"
 	"strconv"
 	"time"
 
@@ -109,7 +110,9 @@ func insertTweet(
 	if err != nil {
 		return err
 	}
-	log.Printf("TW [@%s] %s", tweet.User.ScreenName, tweet.Text)
+	re := regexp.MustCompile(`\s+`)
+	text := re.ReplaceAllString(tweet.Text, " ")
+	log.Printf("TW [@%s] %s", tweet.User.ScreenName, text)
 
 	t, err := tweet.Time()
 	if err != nil {
