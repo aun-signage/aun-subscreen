@@ -24,19 +24,21 @@ func clientId() string {
 	return fmt.Sprintf("%s.%d", hostname, pid)
 }
 
-func mqttClient(mqttUrl string) (*MQTT.MqttClient, error) {
+func mqttClient(mqttUrl string) (*MQTT.MqttClient, <-chan struct{}, error) {
 	opts := MQTT.NewClientOptions()
 	opts.AddBroker(mqttUrl)
 	opts.SetCleanSession(true)
 	opts.SetClientId(clientId())
 
+	chConnectionLost := make(chan struct{})
 	opts.SetOnConnectionLost(func(client *MQTT.MqttClient, reason error) {
-		log.Fatal("MQTT CONNECTION LOST", reason) // TODO reconnect
+		chConnectionLost <- struct{}{}
+		log.Println("MQTT CONNECTION LOST", reason) // TODO reconnect
 	})
 
 	parsed, err := url.Parse(mqttUrl)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	if user := parsed.User; user != nil {
 		if username := user.Username(); username != "" {
@@ -50,10 +52,10 @@ func mqttClient(mqttUrl string) (*MQTT.MqttClient, error) {
 	client := MQTT.NewClient(opts)
 	_, err = client.Start()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return client, nil
+	return client, chConnectionLost, nil
 }
 
 func insertMessage(
@@ -156,37 +158,36 @@ func insertIrc(
 }
 
 func Import(mqttUrl string, db *sql.DB) error {
-	client, err := mqttClient(mqttUrl)
-	if err != nil {
-		return err
+	for {
+		client, chConnectionLost, err := mqttClient(mqttUrl)
+		if err != nil {
+			return err
+		}
+
+		topicFilter, err := MQTT.NewTopicFilter("social-stream/#", 0)
+		if err != nil {
+			return err
+		}
+
+		subscriptionReciept, err := client.StartSubscription(
+			func(client *MQTT.MqttClient, message MQTT.Message) {
+				var err error
+				switch topic := message.Topic(); topic {
+				case "social-stream/tweet":
+					err = insertTweet(db, message.Payload())
+				case "social-stream/irc":
+					err = insertIrc(db, message.Payload())
+				default:
+					log.Println("Unsupported topic '%s' received", topic)
+				}
+				if err != nil {
+					log.Println(err)
+				}
+			}, topicFilter)
+		if err != nil {
+			return err
+		}
+		<-subscriptionReciept
+		<-chConnectionLost
 	}
-
-	log.Println("MQTT connected")
-
-	topicFilter, err := MQTT.NewTopicFilter("social-stream/#", 0)
-	if err != nil {
-		return err
-	}
-
-	subscriptionReciept, err := client.StartSubscription(
-		func(client *MQTT.MqttClient, message MQTT.Message) {
-			var err error
-			switch topic := message.Topic(); topic {
-			case "social-stream/tweet":
-				err = insertTweet(db, message.Payload())
-			case "social-stream/irc":
-				err = insertIrc(db, message.Payload())
-			default:
-				log.Printf("Unknown topic '%s' received", topic)
-			}
-			if err != nil {
-				log.Println(err)
-			}
-		}, topicFilter)
-	if err != nil {
-		return err
-	}
-	<-subscriptionReciept
-
-	return nil
 }
