@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"sync"
+	"time"
 
 	"github.com/aun-signage/aun-subscreen/timeline"
 )
@@ -35,10 +36,12 @@ func NewDispatcher(
 
 func (d *Dispatcher) Dispatch() error {
 	for query, channels := range d.ChannelsForQuery {
+		t0 := time.Now()
 		buf, err := timeline.Timeline(d.DB, query, d.GlobalQueryOptions)
 		if err != nil {
 			return err
 		}
+		log.Printf("Processed query '%s' in %v", query, time.Since(t0))
 		// TODO do not resend if not updated to save bandwidth
 
 		for ch, _ := range channels {
@@ -56,10 +59,12 @@ func (d *Dispatcher) Dispatch() error {
 }
 
 func (d *Dispatcher) DispatchOne(ch chan []byte, query string) error {
+	t0 := time.Now()
 	buf, err := timeline.Timeline(d.DB, query, d.GlobalQueryOptions)
 	if err != nil {
 		return err
 	}
+	log.Printf("Processed query '%s' in %v", query, time.Since(t0))
 
 	select {
 	case ch <- buf:

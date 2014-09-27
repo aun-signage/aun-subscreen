@@ -92,7 +92,6 @@ func main() {
 			if err := d.Dispatch(); err != nil {
 				log.Println(err)
 			}
-			log.Println("Dispatched")
 		}
 	}()
 
