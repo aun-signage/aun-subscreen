@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/url"
 	"strings"
 	"time"
@@ -88,7 +87,6 @@ func buildSql(
 
 	sql += ` ORDER BY time DESC`
 	sql += fmt.Sprintf(` LIMIT %d;`, limit)
-	log.Println(sql)
 
 	return sql, values, nil
 }
