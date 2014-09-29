@@ -71,4 +71,4 @@ gulp.task('build', [
   'vendor-fonts'
 ]);
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['watch', 'build']);
