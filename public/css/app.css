@@ -1,0 +1,78 @@
+body {
+  background-color: #000;
+  margin: 0px;
+  padding: 0px;
+  color: #fff;
+}
+#messages {
+  width: 100%;
+}
+#messages .message {
+  width: 100%;
+  padding: 10px 0 10px 0;
+}
+#messages .message .header {
+  font-size: 36px;
+  height: 48px;
+  white-space: nowrap;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  display: inline-block;
+  padding-right: 12px;
+}
+#messages .message .text {
+  font-size: 42px;
+  font-weight: bold;
+  line-height: 48px;
+  word-wrap: break-word;
+  margin: 5px 10px 5px 10px;
+}
+#messages .irc {
+  border-top: 2px solid #444;
+  border-bottom: 2px solid #000;
+  background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#222222));
+  color: #fff;
+}
+#messages .irc .header {
+  padding-left: 10px;
+  background: -webkit-gradient(linear, left top, left bottom, from(#999999), to(#cccccc));
+  color: #000;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+#messages .irc .header .name {
+  font-weight: bold;
+}
+#messages .irc .text {
+  display: inline;
+}
+#messages .tweet {
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #bbb;
+  background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#cccccc));
+}
+#messages .tweet .header {
+  background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#222222));
+  color: #fff;
+  text-shadow: 0 -1px 0 #000000;
+}
+#messages .tweet .icon {
+  float: left;
+  margin-right: 12px;
+  height: 48px;
+  width: 48px;
+}
+#messages .tweet .name {
+  font-weight: bold;
+  margin-right: 12px;
+}
+#messages .tweet .screen-name {
+  margin-right: 12px;
+}
+#messages .tweet .twitter-icon {
+  text-decoration: none;
+  font-size: 42px;
+}
+#messages .tweet .text {
+  color: #333;
+  text-shadow: 0 1px 0 #ffffff;
+}
