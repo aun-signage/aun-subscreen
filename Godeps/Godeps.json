@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/darashi/aun-subscreen-ng",
+	"ImportPath": "github.com/aun-signage/aun-subscreen",
 	"GoVersion": "go1.3.1",
 	"Packages": [
 		"."

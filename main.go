@@ -12,11 +12,11 @@ import (
 
 	"gopkg.in/igm/sockjs-go.v2/sockjs"
 
-	"github.com/darashi/aun-subscreen-ng/ddl"
-	"github.com/darashi/aun-subscreen-ng/dispatcher"
-	"github.com/darashi/aun-subscreen-ng/importer"
-	"github.com/darashi/aun-subscreen-ng/listener"
-	"github.com/darashi/aun-subscreen-ng/pinger"
+	"github.com/aun-signage/aun-subscreen/ddl"
+	"github.com/aun-signage/aun-subscreen/dispatcher"
+	"github.com/aun-signage/aun-subscreen/importer"
+	"github.com/aun-signage/aun-subscreen/listener"
+	"github.com/aun-signage/aun-subscreen/pinger"
 )
 
 var flagPort int

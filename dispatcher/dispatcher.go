@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 
-	"github.com/darashi/aun-subscreen-ng/timeline"
+	"github.com/aun-signage/aun-subscreen/timeline"
 )
 
 // TODO normalize queries to be more efficient
