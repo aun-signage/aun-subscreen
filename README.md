@@ -9,9 +9,9 @@
 ### Deploy aun-receiver
 
 You need to setup [aun-receiver](https://github.com/aun-signage/aun-receiver) to collect messages.
-See documentations of `aun-receiver` for detail.
+See [documents of aun-receiver](https://github.com/aun-signage/aun-receiver/blob/master/README.md) for detail.
 
-### Create an application
+### Create an application for aun-subscreen
 
 ```
 $ heroku create --buildpack https://github.com/kr/heroku-buildpack-go.git
