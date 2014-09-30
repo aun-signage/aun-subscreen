@@ -34,7 +34,7 @@ func mqttClient(mqttUrl string) (*MQTT.MqttClient, <-chan struct{}, error) {
 	chConnectionLost := make(chan struct{})
 	opts.SetOnConnectionLost(func(client *MQTT.MqttClient, reason error) {
 		chConnectionLost <- struct{}{}
-		log.Println("MQTT CONNECTION LOST", reason) // TODO reconnect
+		log.Println("MQTT CONNECTION LOST", reason)
 	})
 
 	parsed, err := url.Parse(mqttUrl)
