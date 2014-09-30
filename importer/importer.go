@@ -163,38 +163,30 @@ func Import(mqttUrl string, db *sql.DB) error {
 
 	log.Println("MQTT connected")
 
-	tweetTopicFilter, err := MQTT.NewTopicFilter("social-stream/tweet", 0)
-	if err != nil {
-		return err
-	}
-	ircTopicFilter, err := MQTT.NewTopicFilter("social-stream/irc", 0)
+	topicFilter, err := MQTT.NewTopicFilter("social-stream/#", 0)
 	if err != nil {
 		return err
 	}
 
-	tweetSubscriptionReciept, err := client.StartSubscription(
+	subscriptionReciept, err := client.StartSubscription(
 		func(client *MQTT.MqttClient, message MQTT.Message) {
-			err := insertTweet(db, message.Payload())
+			var err error
+			switch topic := message.Topic(); topic {
+			case "social-stream/tweet":
+				err = insertTweet(db, message.Payload())
+			case "social-stream/irc":
+				err = insertIrc(db, message.Payload())
+			default:
+				log.Printf("Unknown topic '%s' received", topic)
+			}
 			if err != nil {
 				log.Println(err)
 			}
-		}, tweetTopicFilter)
+		}, topicFilter)
 	if err != nil {
 		return err
 	}
-	<-tweetSubscriptionReciept
-
-	ircSubscriptionReciept, err := client.StartSubscription(
-		func(client *MQTT.MqttClient, message MQTT.Message) {
-			err := insertIrc(db, message.Payload())
-			if err != nil {
-				log.Println(err)
-			}
-		}, ircTopicFilter)
-	if err != nil {
-		return err
-	}
-	<-ircSubscriptionReciept
+	<-subscriptionReciept
 
 	return nil
 }
